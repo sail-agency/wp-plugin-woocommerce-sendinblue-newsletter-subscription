@@ -1,0 +1,155 @@
+.form-ws-table{
+    border-collapse: collapse;
+    width: 100%;
+    clear: both;
+    margin: -10px;
+    position: relative;
+    padding-right: 160px;
+}
+.form-ws-table td {
+    padding-right: 20px;
+}
+.form-ws-table select{
+    width: 280px;
+}
+.form-ws-table .button{
+    margin-left: 12px;
+}
+.ws_select{
+    width: 25em;
+}
+.ws_textarea,.ws_sms_send_msg_desc{
+    min-height: 120px;
+    max-width: 800px;
+}
+.ws_contact_textarea{
+    min-height: 5em;
+    max-width: 800px;
+}
+.ws_date{
+    padding-bottom: 16px;
+}
+
+.ws_row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.ws-md-1, .ws-md-2, .ws-md-3, .ws-md-4, .ws-md-5, .ws-md-6, .ws-md-7, .ws-md-8, .ws-md-9, .ws-md-10, .ws-md-11, .ws-md-12{
+    position: relative;
+    float: left;
+    min-height: 1px;
+}
+.ws-md-12 {
+    width: 100%;
+}
+.ws-md-11 {
+    width: 91.66666667%;
+}
+.ws-md-10 {
+    width: 83.33333333%;
+}
+.ws-md-9 {
+    width: 75%;
+}
+.ws-md-8 {
+    width: 66.66666667%;
+}
+.ws-md-7 {
+    width: 58.33333333%;
+}
+.ws-md-6 {
+    width: 50%;
+}
+.ws-md-5 {
+    width: 41.66666667%;
+}
+.ws-md-4 {
+    width: 33.33333333%;
+}
+.ws-md-3 {
+    width: 25%;
+}
+.ws-md-2 {
+    width: 16.66666667%;
+}
+.ws-md-1 {
+    width: 8.33333333%;
+    padding-top:5px;
+    text-align: center;
+}
+
+.ws_sms_alert{
+    background-color: white;
+    padding:8px;
+    width:80%;
+}
+.ws_sms_alert.success {
+    border-left:solid green;
+}
+.ws_sms_alert.failure{
+    border-left:solid red;
+}
+.ws-sync-attr-field{
+    padding-left: 20px;
+}
+
+.ws-md-1 a{
+    padding-top: 5px;
+    text-decoration: none;
+}
+.ws-sync-attr{
+    padding: 5px 0px 5px 20px;
+}
+.ws-sync-list{
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+#TB_window{
+    margin-top: -280px !important;
+}
+#TB_title
+{
+    height: 40px !important;
+}
+#TB_ajaxWindowTitle{
+    padding-top: 5px !important;
+}
+#TB_closeWindowButton{
+    margin-top: 5px;
+}
+#TB_ajaxContent p
+{
+    margin: 0em 0;
+}
+.ws-sib_alert
+{
+    margin-bottom: 0px;
+    margin-top:10px;
+}
+.ws-sib_alert.alert-danger
+{
+    border:solid 1px #ebccd1;
+    background-color: #f2dede;
+    padding-left: 10px;
+    color: #a94442;
+}
+.wp-core-ui .button-primary.disabled
+{
+    pointer-events: none;
+}
+#ws-match-attribute-table
+{
+    width: 90%;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+#ws-match-attribute-table td
+{
+    border-bottom: dotted 1px #dedede;
+    padding: 5px 5px 5px 20px;
+}
+#ws-match-attribute-table td a{
+    text-decoration: none;
+}

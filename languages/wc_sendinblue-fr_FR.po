@@ -1,0 +1,935 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce Sendinblue\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-30 18:07+0200\n"
+"PO-Revision-Date: 2020-07-30 18:08+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-KeywordsList: .;__;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/wc-sendinblue-api.php:197
+msgid "Contact synchronization has started."
+msgstr ""
+
+#: includes/wc-sendinblue-api.php:202
+msgid "Something went wrong. PLease try again."
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:34
+#: includes/wc-sendinblue-settings.php:621
+msgid "Sendinblue"
+msgstr "Sendinblue"
+
+#: includes/wc-sendinblue-settings.php:92
+msgid "General"
+msgstr "Général"
+
+#: includes/wc-sendinblue-settings.php:93
+msgid "Subscription Options"
+msgstr "Configuration de l'inscription"
+
+#: includes/wc-sendinblue-settings.php:94
+msgid "Email Options"
+msgstr "Configuration des emails"
+
+#: includes/wc-sendinblue-settings.php:95
+msgid "SMS Options"
+msgstr "Configuration des SMS"
+
+#: includes/wc-sendinblue-settings.php:96
+#: includes/wc-sendinblue-settings.php:803
+msgid "SMS Campaign"
+msgstr "Campagne SMS"
+
+#: includes/wc-sendinblue-settings.php:97
+msgid "Automation"
+msgstr "Automation"
+
+#: includes/wc-sendinblue-settings.php:98
+#: includes/wc-sendinblue-settings.php:982
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: includes/wc-sendinblue-settings.php:99
+#: includes/wc-sendinblue-settings.php:901
+msgid "Chat"
+msgstr "Chat"
+
+#: includes/wc-sendinblue-settings.php:157
+msgid "Sync Lists"
+msgstr "Synchroniser les listes"
+
+#: includes/wc-sendinblue-settings.php:159
+msgid ""
+"Choose the Sendinblue lists in which you want to add your existing users:"
+msgstr ""
+"Choisissez les listes Sendinblue dans lesquels vous souhaitez ajouter vos "
+"contacts existants:"
+
+#: includes/wc-sendinblue-settings.php:186
+#: includes/wc-sendinblue-settings.php:501
+msgid "Match Attributes"
+msgstr "Correspondance des attributs"
+
+#: includes/wc-sendinblue-settings.php:189
+#: includes/wc-sendinblue-settings.php:1039
+msgid "Woocommerce Customers Attributes"
+msgstr "Attributs de contact Woocommerce"
+
+#: includes/wc-sendinblue-settings.php:192
+#: includes/wc-sendinblue-settings.php:1043
+msgid "Sendinblue Contact Attributes"
+msgstr "Attributs de contact Sendinblue"
+
+#: includes/wc-sendinblue-settings.php:226
+msgid "Apply"
+msgstr "Appliquer"
+
+#: includes/wc-sendinblue-settings.php:386
+#: includes/wc-sendinblue-settings.php:434
+msgid "WooCommerce Sendinblue Integration"
+msgstr "Intégration Sendinblue pour WooCommerce"
+
+#: includes/wc-sendinblue-settings.php:383
+msgid "Activate your account with your API v3 key"
+msgstr "Activez votre compte avec votre clé API v3"
+
+#: includes/wc-sendinblue-settings.php:393
+msgid "API access Key"
+msgstr "Accès à la clé API"
+
+#: includes/wc-sendinblue-settings.php:397
+#, php-format
+msgid "Get your Sendinblue API key from %s"
+msgstr "Obtenez votre clé API Sendinblue %s"
+
+#: includes/wc-sendinblue-settings.php:401
+#~ msgid "Do not have a Sendinblue account? %s"
+#~ msgstr "Vous n'avez pas encore de compte Sendinblue? %s"
+
+#: includes/wc-sendinblue-settings.php:400
+#~ msgid "Have an account"
+#~ msgstr "Déjà inscrit"
+
+#: includes/wc-sendinblue-settings.php:401
+#~ msgid "Sign up"
+#~ msgstr "Inscrivez-vous"
+
+#: includes/wc-sendinblue-settings.php:398
+#: includes/wc-sendinblue-settings.php:445
+#: includes/wc-sendinblue-settings.php:872 woocommerce-sendinblue.php:424
+msgid "here"
+msgstr "ici"
+
+#: includes/wc-sendinblue-settings.php:418
+msgid "You have 0 existing customers."
+msgstr "Vous avez 0 clients existants."
+
+#: includes/wc-sendinblue-settings.php:422
+#, php-format
+msgid "You have %s existing customers. Do you want to add them to Sendinblue?"
+msgstr ""
+"Vous avez des clients existants de %s. Voulez-vous les ajouter à Sendinblue?"
+
+#: includes/wc-sendinblue-settings.php:425
+msgid "All your customers have been added to a Sendinblue list."
+msgstr "Tous vos clients ont été ajoutés à une liste Sendinblue."
+
+#: includes/wc-sendinblue-settings.php:438
+msgid "You are currently logged in as:"
+msgstr "Vous etes connecté en tant que :"
+
+#: includes/wc-sendinblue-settings.php:444 woocommerce-sendinblue.php:423
+#, php-format
+msgid "To buy more credits, please click %s."
+msgstr "Pour obtenir plus de crédits, cliquez %s."
+
+#: includes/wc-sendinblue-settings.php:448
+#: includes/wc-sendinblue-settings.php:450
+msgid "Customers Synchronisation"
+msgstr "Synchronisation des clients"
+
+#: includes/wc-sendinblue-settings.php:450
+msgid "Sync my users"
+msgstr "Synchroniser mes contacts"
+
+#: includes/wc-sendinblue-settings.php:460
+msgid "Sendinblue Newsletter Subscription Options"
+msgstr "Configuration de l'inscription à la newsletter Sendinblue"
+
+#: includes/wc-sendinblue-settings.php:466
+#: includes/wc-sendinblue-settings.php:596
+#: includes/wc-sendinblue-settings.php:681
+msgid "Enable/Disable"
+msgstr "Activer/Désactiver"
+
+#: includes/wc-sendinblue-settings.php:467
+msgid "Enable Subscription"
+msgstr "Activer l'inscription"
+
+#: includes/wc-sendinblue-settings.php:468
+msgid ""
+"If enabled, all customers will be added to a list after subscription event "
+"occurs."
+msgstr ""
+"Si cette option est activée, tous les contacts seront ajoutés à une liste "
+"après l'inscription."
+
+#: includes/wc-sendinblue-settings.php:475
+msgid "Subscribe Event"
+msgstr "Evènement d'inscription"
+
+#: includes/wc-sendinblue-settings.php:482
+msgid "Order Created"
+msgstr "Commande créée"
+
+#: includes/wc-sendinblue-settings.php:484
+msgid "Order Completed"
+msgstr "Commande complète"
+
+#: includes/wc-sendinblue-settings.php:491
+msgid "Lists"
+msgstr "Listes"
+
+#: includes/wc-sendinblue-settings.php:497
+msgid "All customers will be added to this list."
+msgstr "Tous les contacts seront ajoutés à cette liste."
+
+#: includes/wc-sendinblue-settings.php:502
+msgid "Enable Match Attributes"
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:503
+msgid ""
+"If enabled, customers attributes will be matched with sendinblue lists "
+"attributes."
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:514
+msgid "Double Opt-In"
+msgstr "Double Opt-In"
+
+#: includes/wc-sendinblue-settings.php:515
+msgid "Enable Double Opt-In"
+msgstr "Activer le Double Opt-In"
+
+#: includes/wc-sendinblue-settings.php:516
+msgid ""
+"If enabled, customers will receive an email prompting them to confirm their "
+"subscription to the list above."
+msgstr ""
+"Si cette option est activée, vos contacts recevront un email leur demandant "
+"de confirmer leur inscription à la liste ci-dessus."
+
+#: includes/wc-sendinblue-settings.php:522
+msgid "Double Opt-In Template"
+msgstr "Template pour le Double Opt-In"
+
+#: includes/wc-sendinblue-settings.php:523
+msgid ""
+"To view or edit the template, login to your Sendinblue online dashboard and "
+"go to Campaigns > SMTP Templates."
+msgstr ""
+"Pour voir ou éditer le template, connectez-vous à votre compte Sendinblue et "
+"allez sur Campagnes > Templates SMTP."
+
+#: includes/wc-sendinblue-settings.php:532
+msgid "Display Opt-In Field"
+msgstr "Montrer le champ Opt-In"
+
+#: includes/wc-sendinblue-settings.php:533
+msgid "Display an Opt-In Field at Checkout"
+msgstr "Montrer un champ Opt-In au paiement"
+
+#: includes/wc-sendinblue-settings.php:536
+msgid ""
+"If enabled, customers will be presented with an \"Opt-in\" checkbox during "
+"checkout and will only be added to the list above if they opt-in."
+msgstr ""
+"Si cette option est activée, vos contacts verront une checkbox \"Opt-In\"\\ "
+"pendant le paiement et ne seront ajoutés à la liste que s'ils cochent la "
+"case."
+
+#: includes/wc-sendinblue-settings.php:549
+msgid "Opt-In Field Label"
+msgstr "Text pour le champ Opt-In"
+
+#: includes/wc-sendinblue-settings.php:550
+msgid "Optional: customize the label displayed next to the opt-in checkbox."
+msgstr ""
+"Optionnel : Personnalisez le text affiché à coté de la checkbox d'Opt-In."
+
+#: includes/wc-sendinblue-settings.php:558
+msgid "Opt-In Checkbox Default Status"
+msgstr "Statut par défaut de la checkbox d'Opt-In"
+
+#: includes/wc-sendinblue-settings.php:559
+msgid "The default state for the opt-in checkbox."
+msgstr "L'état par défaut de la checkbox d'Opt-In."
+
+#: includes/wc-sendinblue-settings.php:564
+msgid "Checked"
+msgstr "Cochée"
+
+#: includes/wc-sendinblue-settings.php:565
+msgid "Unchecked"
+msgstr "Décochée"
+
+#: includes/wc-sendinblue-settings.php:570
+msgid "Opt-In Checkbox Display Location"
+msgstr "Positionnement de la checkbox d'Opt-In"
+
+#: includes/wc-sendinblue-settings.php:571
+msgid ""
+"Where to display the opt-in checkbox on checkout page (under Billing info , "
+"Order info or Terms and Conditions)."
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:572
+msgid ""
+"To display the Opt-in checkbox under the \"Terms & conditions\" checkbox, "
+"you should set the \"Terms & Conditions\" parameter in the WooCommerce "
+"checkout settings."
+msgstr ""
+"Si vous souhaitez afficher la checkbox Opt-in sous la checkbox \"Conditions "
+"générales\", vous devez définir cette dernière depuis les paramètres de "
+"commande WooCommerce."
+
+#: includes/wc-sendinblue-settings.php:577
+msgid "Billing"
+msgstr "Facturation"
+
+#: includes/wc-sendinblue-settings.php:578
+msgid "Order"
+msgstr "Commande"
+
+#: includes/wc-sendinblue-settings.php:579
+msgid "Terms and Conditions"
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:591
+msgid "Sendinblue Email Sending Options"
+msgstr "Configuration des envois d'emails Sendinblue"
+
+#: includes/wc-sendinblue-settings.php:614
+msgid "Templates"
+msgstr "Templates"
+
+#: includes/wc-sendinblue-settings.php:620
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: includes/wc-sendinblue-settings.php:623
+msgid ""
+"Choose Sendinblue if you want to replace default Woocommerce emails by "
+"custom emails saved in Sendinblue."
+msgstr ""
+"Choisissez Sendinblue si vous souhaitez remplacer les emails WooCommerce par "
+"défaut par des emails personnalisés sauvegardés dans Sendinblue."
+
+#: includes/wc-sendinblue-settings.php:675
+msgid "Sendinblue SMS Options"
+msgstr "Configuration des SMS Sendinblue"
+
+#: includes/wc-sendinblue-settings.php:683
+msgid "Enable Sendinblue to send confirmation SMS"
+msgstr "Activer Sendinblue pour envoyer des SMS de confirmation"
+
+#: includes/wc-sendinblue-settings.php:685
+msgid ""
+"Check this box if you want to send SMS notifications through Sendinblue."
+msgstr ""
+"Cochez cette case si vous souhaitez envoyer des SMS de notification via "
+"Sendinblue."
+
+#: includes/wc-sendinblue-settings.php:702
+msgid "Send SMS after order confirmation"
+msgstr "Envoyer un SMS après la confirmation de commande"
+
+#: includes/wc-sendinblue-settings.php:708
+#: includes/wc-sendinblue-settings.php:741
+#: includes/wc-sendinblue-settings.php:837
+msgid "Sender"
+msgstr "Expéditeur"
+
+#: includes/wc-sendinblue-settings.php:709
+#: includes/wc-sendinblue-settings.php:742
+msgid ""
+"This field allows you to customize the SMS sender. The number of characters "
+"is limited to 11 alphanumeric characters. You can't configure your Sender "
+"with a phone number."
+msgstr ""
+"Ce champ vous permet de personnaliser l'expéditeur du SMS. Le nombre de "
+"caractèresest limité à 11 caractères alpha-numériques. Vous ne pouvez pas "
+"utiliser de  numéro de téléphone pour personnaliser votre expéditeur."
+
+#: includes/wc-sendinblue-settings.php:711
+#: includes/wc-sendinblue-settings.php:744
+#: includes/wc-sendinblue-settings.php:840
+msgid "Number of characters left:&nbsp;"
+msgstr "Nombre de caractères restants : &nbsp;"
+
+#: includes/wc-sendinblue-settings.php:717
+#: includes/wc-sendinblue-settings.php:750
+#: includes/wc-sendinblue-settings.php:846
+#: includes/wc-sendinblue-settings.php:1307
+msgid "Message"
+msgstr "Message"
+
+#: includes/wc-sendinblue-settings.php:718
+#: includes/wc-sendinblue-settings.php:751
+msgid ""
+" Create the content of your SMS with the limit of 160-character.Beyond 160 "
+"characters, it will be counted as a second SMS. Thus, if you write  SMS of "
+"240 characters, it will be recorded using two SMS."
+msgstr ""
+" Tapez le contenu de votre SMS dans la limite de 160 caractères. Au-delà de "
+"160 caractères, un second SMS sera compté. Par exemple, si votre message "
+"fait 240 caractères, 2 SMS seront utilisés."
+
+#: includes/wc-sendinblue-settings.php:720
+#: includes/wc-sendinblue-settings.php:753
+#: includes/wc-sendinblue-settings.php:849
+msgid ""
+"Number of SMS used: % &nbsp;&nbsp;&nbsp;Number of characters left: % &nbsp;"
+"&nbsp;&nbsp;Attention: a line break is counted as a single character."
+msgstr ""
+"Nombre de SMS utilisé :% &nbsp;&nbsp;&nbsp; Nombre de caractères restants : "
+"% &nbsp;&nbsp;&nbsp; Important : un saut de ligne est compté comme un "
+"caractère."
+
+#: includes/wc-sendinblue-settings.php:726
+#: includes/wc-sendinblue-settings.php:759
+#: includes/wc-sendinblue-settings.php:855
+msgid "Send a test SMS"
+msgstr "Envoyer un SMS de test"
+
+#: includes/wc-sendinblue-settings.php:727
+#: includes/wc-sendinblue-settings.php:760
+#: includes/wc-sendinblue-settings.php:830
+#: includes/wc-sendinblue-settings.php:856
+msgid ""
+"The phone number should be entered without spaces and include the country "
+"code prefix. In this example: 0033663309741, 0033 is the prefix for France "
+"and 06 63 30 97 41 is the mobile number."
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:729
+#: includes/wc-sendinblue-settings.php:762
+#: includes/wc-sendinblue-settings.php:858
+msgid "Sending a test SMS will be deducted from your SMS credits."
+msgstr "L'envoi d'un SMS de test sera déduit de vos crédits SMS."
+
+#: includes/wc-sendinblue-settings.php:735
+msgid "Send a SMS after order shipment"
+msgstr "Envoyer un SMS après l'expédition de la commande"
+
+#: includes/wc-sendinblue-settings.php:775
+msgid ""
+"You want to be notified by e-mail when you do not have enough SMS credits?"
+msgstr ""
+"Souhaitez-vous etre notifié par email en cas de crédits SMS insuffisant ?"
+
+#: includes/wc-sendinblue-settings.php:781
+msgid "Email"
+msgstr "Email"
+
+#: includes/wc-sendinblue-settings.php:788
+msgid "Limit"
+msgstr "Limite"
+
+#: includes/wc-sendinblue-settings.php:789
+msgid "Alert threshold for remaining credits"
+msgstr "Seuil d'alerte pour les crédits restants"
+
+#: includes/wc-sendinblue-settings.php:807
+msgid "To"
+msgstr "A"
+
+#: includes/wc-sendinblue-settings.php:813
+msgid "A single contact"
+msgstr "Un seul contact"
+
+#: includes/wc-sendinblue-settings.php:814
+msgid "All of my WordPress customers"
+msgstr "Tous mes clients WordPress"
+
+#: includes/wc-sendinblue-settings.php:815
+msgid "Only subscribed customers"
+msgstr "Seulement les clients inscrits"
+
+#: includes/wc-sendinblue-settings.php:829
+msgid "Contact's Phone Number"
+msgstr "Numéro de téléphone du contact"
+
+#: includes/wc-sendinblue-settings.php:838
+msgid ""
+"Use this field to customize your SMS sender. This field is limited to 11 "
+"alphanumeric characters and cannot contain a phone number. "
+msgstr ""
+"Utilisez ce champ pour personnaliser l'expéditeur du SMS. Ce champ est "
+"limité à 11 caractères alpha-numériques et ne peut contenir de numéro de "
+"téléphone. "
+
+#: includes/wc-sendinblue-settings.php:847
+msgid ""
+"Write your SMS content with a 160 character limit. Additional charatcters "
+"will be counted as an additional SMS. For example, if you write a SMS "
+"containing 240 characters, it will use two SMS credits and be received as "
+"two messages."
+msgstr ""
+"Tapez le contenu de votre SMS dans la limite de 160 caractères. Au-delà de "
+"160 caractères, un second SMS sera compté. Par exemple, si votre message "
+"fait 240 caractères, 2 SMS seront utilisés."
+
+#: includes/wc-sendinblue-settings.php:875
+msgid "Marketing Automation"
+msgstr "Marketing Automation"
+
+#: includes/wc-sendinblue-settings.php:877
+msgid "Enable Sendinblue Marketing automation"
+msgstr "Activer Sendinblue Marketing Automation"
+
+#: includes/wc-sendinblue-settings.php:879
+msgid ""
+"Check this box to insert the Sendinblue Tracker javascript snippet to your "
+"website code so you can track your website activity with Sendinblue "
+"Automation. Learn more about the Sendinblue Tracker "
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:886
+msgid "Marketing Automation & Abandoned Cart"
+msgstr "Marketing Automation & Panier Abandonné"
+
+#: includes/wc-sendinblue-settings.php:897
+msgid "Apps page"
+msgstr "page Apps"
+
+#: includes/wc-sendinblue-settings.php:898
+msgid "Here"
+msgstr "Ici"
+
+#: includes/wc-sendinblue-settings.php:904
+#, php-format
+msgid ""
+"Chat feature is available for all sendinblue users. You can enable the "
+"feature on the %s of your Sendinblue account."
+msgstr ""
+"Le chat est disponible pour tous les utilisateurs de Sendinblue. Vous pouvez "
+"activer cette fonctionnalité sur la %s de votre compte Sendinblue."
+
+#: includes/wc-sendinblue-settings.php:906
+#, php-format
+msgid "%s are more info on how to set up chat widget."
+msgstr ""
+"%s plus d'informations ici sur la façon d'ajouter le widget de chat à votre "
+"boutique ou site web."
+
+#: includes/wc-sendinblue-settings.php:948
+msgid ""
+"Activate Automation on the Apps page of your Sendinblue account, then click "
+"on the <strong>TRY FOR FREE</strong> button."
+msgstr ""
+"Activez l'Automation sur la page Apps de votre compte Sendinblue, puis "
+"cliquez sur le bouton <strong>ESSAYER GRATUITEMENT</strong>."
+
+#: includes/wc-sendinblue-settings.php:952
+msgid "Activate"
+msgstr "Activer"
+
+#: includes/wc-sendinblue-settings.php:955
+msgid ""
+"Recover lost sales by reminding your customers about the items they've left "
+"in the cart.<br />Simply follow the steps of the pre-made \"Abandoned Cart\" "
+"workflow: "
+msgstr ""
+"Augmentez vos ventes grâce à la fonctionnalité de relance de panier "
+"abandonné de Sendinblue.<br />Suivez simplement les étapes du scénario pré-"
+"créé \"Panier abandonné\" : "
+
+#: includes/wc-sendinblue-settings.php:956
+msgid "Create in Sendinblue"
+msgstr "Créer sur Sendinblue"
+
+#: includes/wc-sendinblue-settings.php:958
+msgid "To know which WooCommerce variables can be used in your email template "
+msgstr ""
+"Pour savoir quelles variables WooCommerce peuvent être utilisées dans votre "
+"template d'email "
+
+#: includes/wc-sendinblue-settings.php:959
+msgid "click here"
+msgstr "cliquez ici"
+
+#: includes/wc-sendinblue-settings.php:965
+msgid "Abandoned Cart email"
+msgstr "Email de relance de panier abandonné"
+
+#: includes/wc-sendinblue-settings.php:990
+msgid "Email Templates"
+msgstr "Templates Email"
+
+#: includes/wc-sendinblue-settings.php:991
+msgid "Sent"
+msgstr "Envoyés"
+
+#: includes/wc-sendinblue-settings.php:992
+msgid "Deliverability Rate"
+msgstr "Taux de délivrabilité"
+
+#: includes/wc-sendinblue-settings.php:993
+msgid "Open Rate"
+msgstr "Taux d'ouverture"
+
+#: includes/wc-sendinblue-settings.php:994
+msgid "Click Rate"
+msgstr "Taux de clic"
+
+#: includes/wc-sendinblue-settings.php:1113
+msgid ""
+"Match the WooCommerce Customers attributes with your Sendinblue contacts "
+"attributes"
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:1126
+msgid "Enable Customer Notifications"
+msgstr "Activer les notifications Client"
+
+#: includes/wc-sendinblue-settings.php:1131
+msgid "Order confirmation"
+msgstr "Confirmation de commande"
+
+#: includes/wc-sendinblue-settings.php:1132
+msgid "Order shipment"
+msgstr "Expédition de commande"
+
+#: includes/wc-sendinblue-settings.php:1148
+msgid "Enable Admin Notifications"
+msgstr "Activer les notifications Admin"
+
+#: includes/wc-sendinblue-settings.php:1154
+msgid "SMS credit shortage"
+msgstr "Crédit SMS insuffisant"
+
+#: includes/wc-sendinblue-settings.php:1173
+msgid "Notification Activation"
+msgstr "Activation des notifications"
+
+#: includes/wc-sendinblue-settings.php:1178
+#: includes/wc-sendinblue-settings.php:1253
+msgid "New order"
+msgstr "Nouvelle commande"
+
+#: includes/wc-sendinblue-settings.php:1179
+#: includes/wc-sendinblue-settings.php:1254
+msgid "Processing order"
+msgstr "Commande en cours"
+
+#: includes/wc-sendinblue-settings.php:1180
+#: includes/wc-sendinblue-settings.php:1257
+msgid "Refunded order"
+msgstr "Commande remboursée"
+
+#: includes/wc-sendinblue-settings.php:1183
+#: includes/wc-sendinblue-settings.php:1258
+msgid "Cancelled order"
+msgstr "Commande annulée"
+
+#: includes/wc-sendinblue-settings.php:1184
+#: includes/wc-sendinblue-settings.php:1261
+msgid "Completed order"
+msgstr "Commande terminée"
+
+#: includes/wc-sendinblue-settings.php:1185
+#: includes/wc-sendinblue-settings.php:1269
+msgid "New account"
+msgstr "Nouveau compte"
+
+#: includes/wc-sendinblue-settings.php:1188
+#: includes/wc-sendinblue-settings.php:1265
+msgid "Order on-hold"
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:1189
+#: includes/wc-sendinblue-settings.php:1262
+msgid "Failed order"
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:1190
+#: includes/wc-sendinblue-settings.php:1266
+msgid "Customer note"
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:1230
+msgid "Sendinblue Templates"
+msgstr "Templates Sendinblue"
+
+#: includes/wc-sendinblue-settings.php:1240
+msgid "Old"
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:1243
+msgid "New"
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:1246
+msgid "More info"
+msgstr ""
+
+#: includes/wc-sendinblue-settings.php:1273
+msgid ""
+"The default WooCommerce template will be used for notifications without an "
+"active Sendinblue template."
+msgstr ""
+"Sans template Sendinblue actif, le template WooCommerce par défaut sera "
+"utilisé pour les notifications."
+
+#: includes/wc-sendinblue-settings.php:1291
+#, php-format
+msgid ""
+"Please copy/paste comma-separated email addresses.%s If you want to send a "
+"campaign to more than 1000 email addresses, we advise you to send your "
+"campaign directly from %s."
+msgstr ""
+"Veuillez copier/coller les adresses emails séparées par des virgules.%s Si "
+"vous souhaitez envoyer une campagne à plus de 1000 adresses emails, nous "
+"vous  conseillons d'envoyer directement votre campagne depuis %s."
+
+#: includes/wc-sendinblue-settings.php:1311
+#, php-format
+msgid ""
+"> You can insert HTML or simple text in the text input.%s > You must have "
+"UNSUBSCRIBE tag wihin your html or a variable {} in your footer to create a "
+"valid campaign.%s It's important that the user is able to unsubscribe from "
+"your list."
+msgstr ""
+"> Vous pouvez insérer du HTML ou du texte simple dans le champ de saisie de "
+"texte.%s > Vous devez avoir un tag UNSUBSCRIBE dans votre HTML ou une "
+"variable {} dans le footer pour créer une campagne valide.%s Il est "
+"important que votre contact puisse se désinscrire de votre liste."
+
+#: includes/wc-sendinblue-settings.php:1316
+msgid "Send a test email"
+msgstr "Envoyer un email de test"
+
+#: includes/wc-sendinblue-settings.php:1321 woocommerce-sendinblue.php:291
+msgid "Send"
+msgstr "Envoyer"
+
+#: includes/wc-sendinblue-settings.php:1326
+msgid "Send My Campaign"
+msgstr "Envoyer ma campagne"
+
+#: includes/wc-sendinblue-settings.php:1327
+#: includes/wc-sendinblue-settings.php:1352
+#, php-format
+msgid "You can follow sending progress and statistics from your %s account"
+msgstr ""
+"Vous pouvez suivre la progression de l'envoi et les statistiques depuis "
+"votre %s compte"
+
+#: includes/wc-sendinblue-settings.php:1351
+msgid "Send my campaign"
+msgstr "Envoyer ma campagne"
+
+#: includes/wc-sendinblue-sms.php:244
+msgid "Hello! This message has been sent using Sendinblue"
+msgstr "Bonjour! Ce message a été envoyé en utilisant Sendinblue"
+
+#: includes/wc-sendinblue-smtp.php:191
+msgid "Please confirm subscription"
+msgstr "Veuillez confirmer votre inscription"
+
+#: includes/wc-sendinblue.php:328
+msgid "Thank you for subscribing"
+msgstr "Merci pour votre inscription"
+
+#: includes/wc-sendinblue.php:348
+msgid "You have just subscribed to the newsletter of "
+msgstr "Vous venez de vous inscrire à la newsletter de "
+
+#: includes/wc-sendinblue.php:350
+msgid "-Sendinblue"
+msgstr "-Sendinblue"
+
+#: includes/wc-sendinblue.php:627
+msgid "Please install curl on site to use sendinblue plugin."
+msgstr ""
+"Veuillez installer curl sur votre site pour utiliser le plugin Sendinblue."
+
+#: includes/wc-sendinblue.php:630
+msgid "Curl error."
+msgstr "Erreur Curl."
+
+#: includes/wc-sendinblue.php:673
+msgid "Please input correct information."
+msgstr "Veuillez entrer des informations valides."
+
+#: woocommerce-sendinblue.php:47
+#, php-format
+msgid ""
+"%sWooCommerce Sendinblue is inactive.%s This version requires WooCommerce "
+"2.1 or newer. Please %supdate WooCommerce to version 2.1 or newer%s"
+msgstr ""
+"%s WooCommerce Sendinblue est inactif.%s Cette version nécessite WooCommerce "
+"2.1 ou plus. Veuillez %smettre à jour la version WooCommerce à 2.1 ou plus%s"
+
+#: woocommerce-sendinblue.php:272
+msgid "Logout"
+msgstr "Se déconnecter"
+
+#: woocommerce-sendinblue.php:277
+msgid "Login"
+msgstr "Se connecter"
+
+#: woocommerce-sendinblue.php:287
+#, php-format
+msgid ""
+"If you want to personalize the SMS, you can use the variables below:%s - For "
+"first name use {first_name}%s - For last name use {last_name}%s - For order "
+"price use {order_price}%s - For order date use {order_date}"
+msgstr ""
+"Si vous souhaitez personnaliser vos SMS, vous pouvez utiliser les variables "
+"ci-dessous:%s - pour le prénom, utilisez {first_name}%s -  pour le nom, "
+"utilisez {last_name}%s - pour le montant de commande, utilisez "
+"{order_price}%s - pour la date de commande, utilisez {order_date}"
+
+#: woocommerce-sendinblue.php:292
+msgid "Sending"
+msgstr "Envoi"
+
+#: woocommerce-sendinblue.php:293
+msgid "Send the campaign"
+msgstr "Envoyer la campagne"
+
+#: woocommerce-sendinblue.php:294
+msgid "Message has not been sent successfully."
+msgstr "Le message n'a pas pu etre envoyé avec succès."
+
+#: woocommerce-sendinblue.php:295
+msgid "Message has not been sent successfully. Please check format of contacts"
+msgstr ""
+"Le message n'a pas pu etre envoyé avec succès. Veuillez vérifier le format "
+"de vos contacts"
+
+#: woocommerce-sendinblue.php:296
+msgid "Message has been sent successfully."
+msgstr "Le message n'a pas pu etre envoyé avec succès."
+
+#: woocommerce-sendinblue.php:397
+msgid "Sendinblue error: "
+msgstr "Erreur Sendinblue: "
+
+#: woocommerce-sendinblue.php:422
+msgid ""
+"You don't have enough credits to send email through <b>Sendinblue SMTP</b>. "
+msgstr ""
+"Vous n'avez pas suffisament de crédit pour envoyer des emails avec le "
+"<b>SMTP Sendinblue</b>. "
+
+#: woocommerce-sendinblue.php:714
+msgid "Products"
+msgstr "Produits"
+
+#: woocommerce-sendinblue.php:714
+msgid "Quantity"
+msgstr "Quantité"
+
+#: woocommerce-sendinblue.php:714
+msgid "Price"
+msgstr "Prix"
+
+#: woocommerce-sendinblue.php:1044
+msgid "Notification of your credits"
+msgstr "Notification de crédits"
+
+#: woocommerce-sendinblue.php:1053
+msgid "Once Weekly"
+msgstr "Une fois par semaine"
+
+#: woocommerce-sendinblue.php:1128
+#, php-format
+msgid "The attribute %s is duplicated. You can select one at a time."
+msgstr ""
+"L'attribut %s existe déjà. Vous pouvez n'en sélectionner qu'un à la fois."
+
+#: woocommerce-sendinblue.php:1156
+msgid "There is not any user in the roles."
+msgstr "Il n'y a pas d'utilisateur ayant ce(s) role(s)."
+
+#: woocommerce-sendinblue.php:1170
+msgid ""
+"You cannot to use Sendinblue SMTP now because wp_mail has been declared by "
+"another process or plugin. "
+msgstr ""
+
+#~ msgid "NAME"
+#~ msgstr "NOM"
+
+#~ msgid "SURNAME"
+#~ msgstr "PRENOM"
+
+#~ msgid "SMS URL"
+#~ msgstr "URL SMS"
+
+#~ msgid "You have %s existing users. Do you want to add them to Sendinblue?"
+#~ msgstr ""
+#~ "Vous avez %s contacts existants. Voulez-vous les ajouter à Sendinblue ?"
+
+#~ msgid ""
+#~ "Where to display the opt-in checkbox on checkout page (under Billing info "
+#~ "or Order info)."
+#~ msgstr ""
+#~ "Positionnement de la checkbox sur la page de paiement (sous les "
+#~ "informations de facturation ou sous les informations de commande)"
+
+#~ msgid "Canceled order"
+#~ msgstr "Commande annulée"
+
+#~ msgid "Users Synchronisation"
+#~ msgstr "Synchronisation des utilisateurs"
+
+#~ msgid ""
+#~ "The phone number should be entered without spaces and include the country "
+#~ "code prefix. In this example: 0033663309741, 0033 is the prefix for "
+#~ "France and 663309741 is the mobile number."
+#~ msgstr ""
+#~ "Le numéro de téléphone doit etre entré sans espace et doit inclure le "
+#~ "prefixe  du pays. Dans l'exemple 0033663309741, 0033 est le préfixe pour "
+#~ "la France  et 663309741 est le numéro de mobile."
+
+#~ msgid "Choose the user roles you want to add."
+#~ msgstr "Choisissez les types de contacts que vous souhaitez ajouter."
+
+#~ msgid "Choose the map attributes:"
+#~ msgstr "Faites correspondre les attributs :"
+
+#~ msgid "First Name"
+#~ msgstr "Prénom"
+
+#~ msgid "- select -"
+#~ msgstr "-selectionnez-"
+
+#~ msgid "Last Name"
+#~ msgstr "Nom"
+
+#~ msgid "Phone Number"
+#~ msgstr "Numéro de téléphone"
+
+#~ msgid "Transactional Attributes:"
+#~ msgstr "Attributs transactionnels :"
+
+#~ msgid "Do you want to import all orders?"
+#~ msgstr "Souhaitez-vous importer toutes les commandes ?"
+
+#~ msgid "Order Processing"
+#~ msgstr "Order Processing"

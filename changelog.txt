@@ -1,0 +1,8 @@
+*** Sendinblue Newsletter Subscription Changelog ***
+
+2014.05.21 - version 1.0
+ * First release
+
+2015.12.15 - version 1.1.0
+ * Improved transactional email and SMS campaign
+

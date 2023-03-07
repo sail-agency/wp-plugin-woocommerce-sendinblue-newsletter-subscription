@@ -1,0 +1,8 @@
+{
+  "name": "sail-agency/wp-plugin-woocommerce-sendinblue-newsletter-subscription",
+  "keywords": ["wordpress", "plugin"],
+  "homepage": "https://github.com/sail-agency/wp-plugin-woocommerce-sendinblue-newsletter-subscription",
+  "type": "wordpress-plugin",
+  "description": "Sendinblue Newsletter Subscription for WooCommerce",
+  "version": "3.1.57"
+}

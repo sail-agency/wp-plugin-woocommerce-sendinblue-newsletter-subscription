@@ -892,6 +892,23 @@ class ApiManager
             }
             $order_detail .= '</table>';
             if ( version_compare( get_option( 'woocommerce_db_version' ), '3.0', '>=' ) ) {
+
+                // check for tracking
+                $tracking_provider = $order->get_meta('_wc_shipment_tracking_items')[0]["tracking_provider"] ? $order->get_meta('_wc_shipment_tracking_items')[0]["tracking_provider"] : $order->get_meta('_wc_shipment_tracking_items')[0]["custom_tracking_provider"];
+
+                $tracking_text = 'Your order has been shipped. You will receive another email with your tracking information shortly.';
+                // send shipping details if exist
+                if ($tracking_provider) {
+                    $tracking_number = $order->get_meta('_wc_shipment_tracking_items')[0]["tracking_number"];
+                    $tracking_url = $order->get_meta('_wc_shipment_tracking_items')[0]["custom_tracking_link"];
+                    if($tracking_url) {
+                        $tracking_text = "Your order has been shipped with the tracking number <a href='".$tracking_url."' style='color:#477c93;'>". $tracking_number."</a> with ". $tracking_provider.".";
+                    }
+                    else {
+                        $tracking_text = "Your order has been shipped with the tracking number  $tracking_number with $tracking_provider.";
+                    }
+                }
+
                 $orders = array(
                     'ORDER_ID'              => $order->get_order_number(),
                     'BILLING_FIRST_NAME'    => $order->get_billing_first_name(),
@@ -933,6 +950,7 @@ class ApiManager
                     'CUSTOMER_IP_ADDRESS'   => $order->get_customer_ip_address(),
                     'CUSTOMER_USER_AGENT'   => $order->get_customer_user_agent(),
                     'REFUNDED_AMOUNT'       => wc_price( $refunded_amount, array( 'currency' => $order->get_currency() ) ),
+                    '{TRACKING_TEXT}'      => $tracking_text,
                 );
             } else {
                 $orders = array(

@@ -893,17 +893,31 @@ class ApiManager
             $order_detail .= '</table>';
             if ( version_compare( get_option( 'woocommerce_db_version' ), '3.0', '>=' ) ) {
                 // check for tracking
-                $tracking_provider = $order->get_meta('_wc_shipment_tracking_items')[0]["tracking_provider"] ? $order->get_meta('_wc_shipment_tracking_items')[0]["tracking_provider"] : $order->get_meta('_wc_shipment_tracking_items')[0]["custom_tracking_provider"];
+                $metadata = $order->get_meta_data();
 
+                foreach ( $metadata as $meta ) {
+
+                    $meta_key = $meta->key;
+                    $meta_value = $meta->value;
+
+                    if($meta_key == '_wc_shipment_tracking_items'){
+                        $shipment = $meta_value;
+                    }
+                }
+                
+                if(!empty($shipment)) {
+                $tracking_provider = $shipment[0]["tracking_provider"] ?: $shipment[0]["custom_tracking_provider"];
+                }
+               
                 $tracking_text = 'Your order has been shipped. You will receive another email with your tracking information shortly.';
                 // send shipping details if exist
                 if ($tracking_provider) {
-                    $tracking_number = $order->get_meta('_wc_shipment_tracking_items')[0]["tracking_number"];
-                    $tracking_url = $order->get_meta('_wc_shipment_tracking_items')[0]["custom_tracking_link"];
-                    if($tracking_url) {
+                    $tracking_number = $shipment[0]["tracking_number"];
+                    $tracking_url = $shipment[0]["custom_tracking_link"];
+                    if($tracking_url && $tracking_number) {
                         $tracking_text = "Your order has been shipped with the tracking number <a href='".$tracking_url."' style='color:#477c93;'>". $tracking_number."</a> with ". $tracking_provider.".";
                     }
-                    else {
+                    else if ($tracking_number) {
                         $tracking_text = "Your order has been shipped with the tracking number  $tracking_number with $tracking_provider.";
                     }
                 }

@@ -517,13 +517,13 @@ class ApiManager
         }
         return [$email_html, $email_plain];
     }
-    
+
     private function wp_mail_template_order($order, $email) {
         $email->is_enabled(false);
         $email->object = $order;
         $email_html = "";
         $email_plain = "";
-        
+
         if ($email->get_content_type() == "text/plain") {
             $email_plain = $email->get_content();
         } else {
@@ -543,7 +543,7 @@ class ApiManager
         } else {
             $email_html = apply_filters( 'woocommerce_mail_content', $email->style_inline( $email->get_content_html() ) );
         }
-        
+
         return [$email_html, $email_plain];
     }
 
@@ -562,7 +562,7 @@ class ApiManager
 
     public function on_new_customer_creation($customer_id, $new_customer_data, $password_generated) {
         $settings = $this->is_email_feature_enabled();
-        
+
         $email = WC()->mailer()->emails['WC_Email_Customer_New_Account'];
         $attachment_path = $this->get_email_attachments_path($email);
 
@@ -589,7 +589,7 @@ class ApiManager
         if (empty($all_customer_notes) || (!empty($all_customer_notes) && $all_customer_notes[0]->id != $note_id)) {
             return;
         }
-        
+
         $order_details = $this->if_email_enabled_get_order_details($order->get_order_number());
         if (!$order_details)
         {
@@ -629,7 +629,7 @@ class ApiManager
             if ($settings[SendinblueClient::IS_COMPLETED_ORDER_TEMPLATE_ENABLED]) {
                 $this->trigger_event_email_sib($order_details['BILLING_EMAIL'], $order_details, $settings[SendinblueClient::COMPLETED_ORDER_TEMPLATE_ID], self::EVENT_GROUP_SIB, $attachment_path );
             } else {
-                
+
                 $order = $this->wc_get_order($order_id);
                 $template = $this->wp_mail_template_order($order, $email);
                 $subject = $email->get_subject();
@@ -752,11 +752,11 @@ class ApiManager
             }
         }
     }
-    
+
     public function trigger_admin_email_on_new_order($order)
     {
         $settings = $this->get_email_settings();
-        
+
         if (isset($settings[SendinblueClient::IS_EMAIL_FEATURE_ENABLED]) && $settings[SendinblueClient::IS_EMAIL_FEATURE_ENABLED]) {
 
             $mailer = WC()->mailer();
@@ -893,21 +893,35 @@ class ApiManager
             $order_detail .= '</table>';
             if ( version_compare( get_option( 'woocommerce_db_version' ), '3.0', '>=' ) ) {
                 // check for tracking
-                $tracking_provider = $order->get_meta('_wc_shipment_tracking_items')[0]["tracking_provider"] ? $order->get_meta('_wc_shipment_tracking_items')[0]["tracking_provider"] : $order->get_meta('_wc_shipment_tracking_items')[0]["custom_tracking_provider"];
+                $metadata = $order->get_meta_data();
+
+                foreach ($metadata as $meta) {
+                    if ($meta->key == '_wc_shipment_tracking_items') {
+                        $shipment = $meta->value;
+                        break;
+                    }
+                }
+
+                if (!empty($shipment)) {
+                    $tracking_provider = $shipment[0]["tracking_provider"] ?: $shipment[0]["custom_tracking_provider"];
+                }
 
                 $tracking_text = 'Your order has been shipped. You will receive another email with your tracking information shortly.';
                 // send shipping details if exist
                 if ($tracking_provider) {
-                    $tracking_number = $order->get_meta('_wc_shipment_tracking_items')[0]["tracking_number"];
-                    $tracking_url = $order->get_meta('_wc_shipment_tracking_items')[0]["custom_tracking_link"];
-                    if($tracking_url) {
-                        $tracking_text = "Your order has been shipped with the tracking number <a href='".$tracking_url."' style='color:#477c93;'>". $tracking_number."</a> with ". $tracking_provider.".";
-                    }
-                    else {
-                        $tracking_text = "Your order has been shipped with the tracking number  $tracking_number with $tracking_provider.";
+                    $tracking_number = $shipment[0]["tracking_number"];
+                    $tracking_url = $shipment[0]["custom_tracking_link"];
+                    $tracking_link = '<a href="' . $tracking_url . '" target="_blank">' . $tracking_number . '</a> .';
+
+                    if ($tracking_url && $tracking_number) {
+                        $tracking_text = "Your order has been shipped with the tracking number $tracking_link with $tracking_provider.";;
+                    } else {
+                        if ($tracking_number) {
+                            $tracking_text = "Your order has been shipped with the tracking number $tracking_number with $tracking_provider.";
+                        }
                     }
                 }
-                
+
                 $orders = array(
                     'ORDER_ID'              => $order->get_order_number(),
                     'BILLING_FIRST_NAME'    => $order->get_billing_first_name(),

@@ -911,10 +911,10 @@ class ApiManager
                 if ($tracking_provider) {
                     $tracking_number = $shipment[0]["tracking_number"];
                     $tracking_url = $shipment[0]["custom_tracking_link"];
-                    $tracking_link = '<a href="' . $tracking_url . '" target="_blank">' . $tracking_number . '</a>';
+                    $tracking_link = '<a href="' . $tracking_url . '" target="_blank">' . $tracking_number . '</a> .';
 
                     if ($tracking_url && $tracking_number) {
-                        $tracking_text = "Your order has been shipped with the tracking number $tracking_link with " . $tracking_provider . ".";
+                        $tracking_text = "Your order has been shipped with the tracking number $tracking_link with $tracking_provider.";;
                     } else {
                         if ($tracking_number) {
                             $tracking_text = "Your order has been shipped with the tracking number $tracking_number with $tracking_provider.";

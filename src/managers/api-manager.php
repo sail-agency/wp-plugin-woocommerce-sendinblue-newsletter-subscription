@@ -964,6 +964,7 @@ class ApiManager
                     'CUSTOMER_USER_AGENT'   => $order->get_customer_user_agent(),
                     'REFUNDED_AMOUNT'       => wc_price( $refunded_amount, array( 'currency' => $order->get_currency() ) ),
                     'TRACKING_TEXT'         => $tracking_text,
+                    'TEST_ATTRIBUTE'        => 'test',
                 );
             } else {
                 $orders = array(
@@ -1007,6 +1008,7 @@ class ApiManager
                     'CUSTOMER_IP_ADDRESS'   => $order->customer_ip_address,
                     'CUSTOMER_USER_AGENT'   => $order->customer_user_agent,
                     'REFUNDED_AMOUNT'       => wc_price( $refunded_amount, array( 'currency' => $order->order_currency ) ),
+                    'TEST_ATTRIBUTE_2'        => 'test2',
                 );
             }
         }

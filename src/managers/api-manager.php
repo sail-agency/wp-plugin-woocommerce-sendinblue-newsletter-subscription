@@ -906,7 +906,7 @@ class ApiManager
                     $tracking_provider = $shipment[0]["tracking_provider"] ?: $shipment[0]["custom_tracking_provider"];
                 }
 
-                $tracking_text = 'Your order has been shipped. You will receive another email with your tracking information shortly.';
+                $tracking_text = "Your order has been shipped. You will receive another email with your tracking information shortly.";
                 // send shipping details if exist
                 if ($tracking_provider) {
                     $tracking_number = $shipment[0]["tracking_number"];
@@ -914,7 +914,7 @@ class ApiManager
                     $tracking_link = '<a href="' . $tracking_url . '" target="_blank">' . $tracking_number . '</a> .';
 
                     if ($tracking_url && $tracking_number) {
-                        $tracking_text = "Your order has been shipped with the tracking number $tracking_link with $tracking_provider.";;
+                        $tracking_text = "Your order has been shipped with the tracking number $tracking_link with $tracking_provider.";
                     } else {
                         if ($tracking_number) {
                             $tracking_text = "Your order has been shipped with the tracking number $tracking_number with $tracking_provider.";

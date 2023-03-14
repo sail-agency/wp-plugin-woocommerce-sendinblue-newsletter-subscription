@@ -896,7 +896,7 @@ class ApiManager
                 $shipment_meta = $order->get_meta('_wc_shipment_tracking_items')[0];
 
                 $tracking_provider = $shipment_meta["tracking_provider"] ?: $shipment_meta["custom_tracking_provider"] ?: null;
-                $tracking_text = "Your order has been shipped. You will receive another email with your tracking information shortly.";
+                $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped! You will receive another email with your tracking information shortly.";
 
                 // send shipping details if exist
                 if ($tracking_provider) {
@@ -905,9 +905,9 @@ class ApiManager
                     $tracking_link = '<a href="' . $tracking_url . '" target="_blank">' . $tracking_number . '</a>';
 
                     if ($tracking_url && $tracking_number) {
-                        $tracking_text = "Your order has been shipped with $tracking_provider.<br>Track your order using $tracking_link.";
+                        $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped with $tracking_provider.<br>Track your order using $tracking_link.";
                     } elseif ($tracking_number) {
-                        $tracking_text = "Your order has been shipped with $tracking_provider using number $tracking_number";
+                        $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped with $tracking_provider using number $tracking_number";
                     }
                 }
 
@@ -935,7 +935,7 @@ class ApiManager
                     'SHIPPING_COUNTRY'      => $order->get_shipping_country(),
                     'CART_DISCOUNT'         => strval($order->get_discount_total()),
                     'CART_DISCOUNT_TAX'     => $order->get_discount_tax(),
-                    'SHIPPING_METHOD_TITLE' => $tracking_text,
+                    'SHIPPING_METHOD_TITLE' => $order->get_status() === 'completed' ? $tracking_text : $order->get_shipping_method(),
                     'CUSTOMER_USER'         => $order->get_customer_user_agent(),
                     'ORDER_KEY'             => $order->get_order_key(),
                     'ORDER_DISCOUNT'        => wc_price( $order->get_discount_total(), array( 'currency' => $order->get_currency() ) ),

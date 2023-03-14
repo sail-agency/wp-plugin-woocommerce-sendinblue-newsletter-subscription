@@ -893,32 +893,21 @@ class ApiManager
             $order_detail .= '</table>';
             if ( version_compare( get_option( 'woocommerce_db_version' ), '3.0', '>=' ) ) {
                 // check for tracking
-                $metadata = $order->get_meta_data();
+                $shipment_meta = $order->get_meta('_wc_shipment_tracking_items')[0];
 
-                foreach ($metadata as $meta) {
-                    if ($meta->key == '_wc_shipment_tracking_items') {
-                        $shipment = $meta->value;
-                        break;
-                    }
-                }
-
-                if (!empty($shipment)) {
-                    $tracking_provider = $shipment[0]["tracking_provider"] ?: $shipment[0]["custom_tracking_provider"];
-                }
-
+                $tracking_provider = $shipment_meta["tracking_provider"] ?: $shipment_meta["custom_tracking_provider"] ?: null;
                 $tracking_text = "Your order has been shipped. You will receive another email with your tracking information shortly.";
+
                 // send shipping details if exist
                 if ($tracking_provider) {
-                    $tracking_number = $shipment[0]["tracking_number"];
-                    $tracking_url = $shipment[0]["custom_tracking_link"];
-                    $tracking_link = '<a href="' . $tracking_url . '" target="_blank">' . $tracking_number . '</a> .';
+                    $tracking_number = $shipment_meta["tracking_number"];
+                    $tracking_url = $shipment_meta["custom_tracking_link"];
+                    $tracking_link = '<a href="' . $tracking_url . '" target="_blank">' . $tracking_number . '</a>';
 
                     if ($tracking_url && $tracking_number) {
-                        $tracking_text = "Your order has been shipped with the tracking number $tracking_link with $tracking_provider.";
-                    } else {
-                        if ($tracking_number) {
-                            $tracking_text = "Your order has been shipped with the tracking number $tracking_number with $tracking_provider.";
-                        }
+                        $tracking_text = "Your order has been shipped with $tracking_provider.<br>Track your order using $tracking_link.";
+                    } elseif ($tracking_number) {
+                        $tracking_text = "Your order has been shipped with $tracking_provider using number $tracking_number";
                     }
                 }
 
@@ -946,7 +935,7 @@ class ApiManager
                     'SHIPPING_COUNTRY'      => $order->get_shipping_country(),
                     'CART_DISCOUNT'         => strval($order->get_discount_total()),
                     'CART_DISCOUNT_TAX'     => $order->get_discount_tax(),
-                    'SHIPPING_METHOD_TITLE' => $order->get_shipping_method(),
+                    'SHIPPING_METHOD_TITLE' => $tracking_text,
                     'CUSTOMER_USER'         => $order->get_customer_user_agent(),
                     'ORDER_KEY'             => $order->get_order_key(),
                     'ORDER_DISCOUNT'        => wc_price( $order->get_discount_total(), array( 'currency' => $order->get_currency() ) ),
@@ -963,8 +952,6 @@ class ApiManager
                     'CUSTOMER_IP_ADDRESS'   => $order->get_customer_ip_address(),
                     'CUSTOMER_USER_AGENT'   => $order->get_customer_user_agent(),
                     'REFUNDED_AMOUNT'       => wc_price( $refunded_amount, array( 'currency' => $order->get_currency() ) ),
-                    'TRACKING_TEXT'         => $tracking_text,
-                    'TEST_ATTRIBUTE'        => 'test',
                 );
             } else {
                 $orders = array(
@@ -1008,7 +995,6 @@ class ApiManager
                     'CUSTOMER_IP_ADDRESS'   => $order->customer_ip_address,
                     'CUSTOMER_USER_AGENT'   => $order->customer_user_agent,
                     'REFUNDED_AMOUNT'       => wc_price( $refunded_amount, array( 'currency' => $order->order_currency ) ),
-                    'TEST_ATTRIBUTE_2'        => 'test2',
                 );
             }
         }

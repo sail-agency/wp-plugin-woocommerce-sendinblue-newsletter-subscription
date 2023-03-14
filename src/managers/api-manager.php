@@ -893,21 +893,25 @@ class ApiManager
             $order_detail .= '</table>';
             if ( version_compare( get_option( 'woocommerce_db_version' ), '3.0', '>=' ) ) {
                 // check for tracking
-                $shipment_meta = $order->get_meta('_wc_shipment_tracking_items')[0];
+                $shipment_meta_all = $order->get_meta('_wc_shipment_tracking_items');
+                $shipment_meta = $shipment_meta_all[0] ?? null;
 
-                $tracking_provider = $shipment_meta["tracking_provider"] ?: $shipment_meta["custom_tracking_provider"] ?: null;
                 $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped! You will receive another email with your tracking information shortly.";
 
                 // send shipping details if exist
-                if ($tracking_provider) {
-                    $tracking_number = $shipment_meta["tracking_number"];
-                    $tracking_url = $shipment_meta["custom_tracking_link"];
-                    $tracking_link = '<a href="' . $tracking_url . '" target="_blank">' . $tracking_number . '</a>';
+                if ($shipment_meta) {
+                    $tracking_provider = $shipment_meta["tracking_provider"] ?: $shipment_meta["custom_tracking_provider"] ?: null;
 
-                    if ($tracking_url && $tracking_number) {
-                        $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped with $tracking_provider.<br>Track your order using $tracking_link.";
-                    } elseif ($tracking_number) {
-                        $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped with $tracking_provider using number $tracking_number";
+                    if ($tracking_provider) {
+                        $tracking_number = $shipment_meta["tracking_number"];
+                        $tracking_url = $shipment_meta["custom_tracking_link"];
+                        $tracking_link = '<a href="' . $tracking_url . '" target="_blank">' . $tracking_number . '</a>';
+
+                        if ($tracking_url && $tracking_number) {
+                            $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped with $tracking_provider.<br>Track your order using $tracking_link.";
+                        } elseif ($tracking_number) {
+                            $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped with $tracking_provider using number $tracking_number";
+                        }
                     }
                 }
 

@@ -859,11 +859,7 @@ class ApiManager
 
         if (is_null($tracking_provider) || is_null($tracking_number)) return null;
 
-        return [
-            "tracking_provider" => $tracking_provider,
-            "tracking_number" => $tracking_number,
-            "tracking_url" => $tracking_url,
-        ];
+        return [$tracking_provider, $tracking_number, $tracking_url];
     }
 
     private function get_tracking_text($order)
@@ -927,8 +923,12 @@ class ApiManager
             }
             $order_detail .= '</table>';
             if ( version_compare( get_option( 'woocommerce_db_version' ), '3.0', '>=' ) ) {
-                // check for tracking
-                $tracking_text = $this->get_tracking_text($order) ?? '';
+                try {
+                    $tracking_text = $this->get_tracking_text($order);
+                }
+                catch (\Exception $ex) {
+                    $tracking_text = '';
+                }
 
                 $orders = array(
                     'ORDER_ID'              => $order->get_order_number(),

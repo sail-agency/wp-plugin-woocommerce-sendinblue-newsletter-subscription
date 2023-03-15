@@ -846,6 +846,41 @@ class ApiManager
         $client->eventsSync(SendinblueClient::EMAIL_SEND, $payload);
     }
 
+    private function get_tracking_meta($order)
+    {
+        $shipment_meta_all = $order->get_meta("_wc_shipment_tracking_items");
+
+        if (!array_key_exists(0, $shipment_meta_all)) return null;
+
+        $shipment_meta = $shipment_meta_all[0];
+        $tracking_provider = $shipment_meta["tracking_provider"] ?: $shipment_meta["custom_tracking_provider"] ?: null;
+        $tracking_number = $shipment_meta["tracking_number"] ?: null;
+        $tracking_url = $shipment_meta["custom_tracking_link"] ?: null;
+
+        if (is_null($tracking_provider) || is_null($tracking_number)) return null;
+
+        return [
+            "tracking_provider" => $tracking_provider,
+            "tracking_number" => $tracking_number,
+            "tracking_url" => $tracking_url,
+        ];
+    }
+
+    private function get_tracking_text($order)
+    {
+        if (is_null($order)) return "";
+
+        if ($tracking_fields = $this->get_tracking_meta($order)) {
+            [$tracking_provider, $tracking_number, $tracking_url] = $tracking_fields;
+
+            $tracking_number = $tracking_url ? "<a href='$tracking_url' target='_blank'>$tracking_number</a>" : "<strong>$tracking_number</strong>";
+
+            return "Your order has been shipped with $tracking_provider using tracking number $tracking_number.<br>Please note that it can take up to <strong>24 hours</strong> until the tracking number is active.";
+        }
+
+        return "Your order has been shipped!<br>You will receive another email with your tracking information within the next 24 hours.";
+    }
+
     private function prepare_order_data($order)
     {
         if ( null != $order ) {
@@ -893,27 +928,7 @@ class ApiManager
             $order_detail .= '</table>';
             if ( version_compare( get_option( 'woocommerce_db_version' ), '3.0', '>=' ) ) {
                 // check for tracking
-                $shipment_meta_all = $order->get_meta('_wc_shipment_tracking_items');
-                $shipment_meta = $shipment_meta_all[0] ?? null;
-
-                $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped! You will receive another email with your tracking information shortly.";
-
-                // send shipping details if exist
-                if ($shipment_meta) {
-                    $tracking_provider = $shipment_meta["tracking_provider"] ?: $shipment_meta["custom_tracking_provider"] ?: null;
-
-                    if ($tracking_provider) {
-                        $tracking_number = $shipment_meta["tracking_number"];
-                        $tracking_url = $shipment_meta["custom_tracking_link"];
-                        $tracking_link = '<a href="' . $tracking_url . '" target="_blank">' . $tracking_number . '</a>';
-
-                        if ($tracking_url && $tracking_number) {
-                            $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped with $tracking_provider.<br>Track your order using $tracking_link.";
-                        } elseif ($tracking_number) {
-                            $tracking_text = "{$order->get_shipping_method()}.<br>Your order has been shipped with $tracking_provider using number $tracking_number";
-                        }
-                    }
-                }
+                $tracking_text = $this->get_tracking_text($order) ?? '';
 
                 $orders = array(
                     'ORDER_ID'              => $order->get_order_number(),
@@ -939,7 +954,7 @@ class ApiManager
                     'SHIPPING_COUNTRY'      => $order->get_shipping_country(),
                     'CART_DISCOUNT'         => strval($order->get_discount_total()),
                     'CART_DISCOUNT_TAX'     => $order->get_discount_tax(),
-                    'SHIPPING_METHOD_TITLE' => $order->get_status() === 'completed' ? $tracking_text : $order->get_shipping_method(),
+                    'SHIPPING_METHOD_TITLE' => $order->get_shipping_method(),
                     'CUSTOMER_USER'         => $order->get_customer_user_agent(),
                     'ORDER_KEY'             => $order->get_order_key(),
                     'ORDER_DISCOUNT'        => wc_price( $order->get_discount_total(), array( 'currency' => $order->get_currency() ) ),
@@ -954,7 +969,9 @@ class ApiManager
                     'PAYMENT_METHOD'        => $order->get_payment_method(),
                     'PAYMENT_METHOD_TITLE'  => $order->get_payment_method_title(),
                     'CUSTOMER_IP_ADDRESS'   => $order->get_customer_ip_address(),
-                    'CUSTOMER_USER_AGENT'   => $order->get_customer_user_agent(),
+
+                    // we repurpose the following attribute that isn't used in any templates, for use of the tracking text markup
+                    'CUSTOMER_USER_AGENT'   => $order->get_status() === 'completed' ? $tracking_text : $order->get_customer_user_agent(),
                     'REFUNDED_AMOUNT'       => wc_price( $refunded_amount, array( 'currency' => $order->get_currency() ) ),
                 );
             } else {

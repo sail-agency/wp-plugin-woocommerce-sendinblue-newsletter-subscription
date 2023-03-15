@@ -850,7 +850,7 @@ class ApiManager
     {
         $shipment_meta_all = $order->get_meta("_wc_shipment_tracking_items");
 
-        if (!array_key_exists(0, $shipment_meta_all)) return null;
+        if (!is_array($shipment_meta_all) || !array_key_exists(0, $shipment_meta_all)) return null;
 
         $shipment_meta = $shipment_meta_all[0];
         $tracking_provider = $shipment_meta["tracking_provider"] ?: $shipment_meta["custom_tracking_provider"] ?: null;

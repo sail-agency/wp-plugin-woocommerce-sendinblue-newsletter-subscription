@@ -919,6 +919,12 @@ class ApiManager
                 } else {
                     $product_price = wc_price( $sub_total, array( 'currency' => $order->order_currency ) );
                 }
+
+                // Sail added: do not show price if bundled child item
+                if ( wc_pb_is_bundled_order_item( $item ) ) {
+                    $product_price = '';
+                }
+
                 $order_detail .= '<tr><td>' . $product_name . '</td><td>' . $product_quantity . '</td><td>' . $product_price . '</td></tr>';
             }
             $order_detail .= '</table>';

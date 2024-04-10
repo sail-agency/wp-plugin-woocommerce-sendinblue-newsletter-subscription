@@ -12,6 +12,7 @@ use SendinblueWoocommerce\Managers\CartEventsManagers;
 use WP_Error;
 use WP_REST_Response;
 use WP_Query;
+use SendinblueWoocommerce\Managers\SailExtensionsManager;
 
 require_once SENDINBLUE_WC_ROOT_PATH . '/src/managers/cart-events-manager.php';
 require_once SENDINBLUE_WC_ROOT_PATH . '/src/managers/products-manager.php';
@@ -916,7 +917,7 @@ class ApiManager
         } else {
             $email_html = apply_filters( 'woocommerce_mail_content', $email->style_inline( $email->get_content_html() ) );
         }
-        
+
         return [$email_html, $email_plain];
     }
 
@@ -1309,7 +1310,7 @@ class ApiManager
                     'PAYMENT_METHOD'        => $order->get_payment_method(),
                     'PAYMENT_METHOD_TITLE'  => $order->get_payment_method_title(),
                     'CUSTOMER_IP_ADDRESS'   => $order->get_customer_ip_address(),
-                    'CUSTOMER_USER_AGENT'   => $order->get_customer_user_agent(),
+                    'CUSTOMER_USER_AGENT'   => $order->get_status() === 'completed' ? SailExtensionsManager::getOrderTrackingContent($order) : $order->get_customer_user_agent(),
                     'REFUNDED_AMOUNT'       => wc_price( $refunded_amount, array( 'currency' => $order->get_currency() ) ),
                 );
             } else {
@@ -1378,6 +1379,12 @@ class ApiManager
             } else {
                 $product_price = wc_price($sub_total, array('currency' => $order->order_currency));
             }
+
+            // Sail added: do not show price if bundled child item
+            if (class_exists('WC_Bundles') && wc_pb_is_bundled_order_item( $item )) {
+                $product_price = '';
+            }
+
             $order_detail .= '<tr><td>' . $product_name . '</td><td>' . $product_quantity . '</td><td>' . $product_price . '</td></tr>';
         }
         $order_detail .= '</table>';

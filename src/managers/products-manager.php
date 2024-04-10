@@ -97,8 +97,8 @@ class ProductsManager
         $data['title'] = $product->get_title();
         $data['type'] = $product->get_type();
         $data['permalink'] = is_string($product->get_permalink()) ? $product->get_permalink() : "" ;
-        $data['date_created'] = $product->get_date_created()->date(DATE_ATOM);
-        $data['date_modified'] = $product->get_date_modified()->date(DATE_ATOM);
+        $data['date_created'] = $product->get_date_created() !== null ? $product->get_date_created()->date(DATE_ATOM) : null;
+        $data['date_modified'] = $product->get_date_modified() !== null ? $product->get_date_modified()->date(DATE_ATOM) : null;
 
         if (!empty($data['category_ids'])) {
             $data['categories'] = [];

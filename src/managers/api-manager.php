@@ -53,7 +53,7 @@ class ApiManager
         add_action('wp_footer', array($cart_events_manager, 'ws_cart_custom_fragment_load'));
         add_filter('woocommerce_add_to_cart_fragments', array($cart_events_manager, 'ws_cart_custom_fragment'), 10, 1);
         add_action('woocommerce_thankyou', array($cart_events_manager, 'ws_checkout_completed'));
-        add_action('woocommerce_order_status_changed', array( $this, 'on_order_status_changed' ), 10, 3);
+        add_action('woocommerce_order_status_changed', array($this, 'on_order_status_changed' ), 10, 3);
         add_action('woocommerce_order_status_refunded', array($this, 'on_order_status_refunded'), 10, 1);
         add_action('woocommerce_order_note_added', array($this, 'on_new_customer_note'), 10, 2);
         add_action('woocommerce_created_customer', array($this, 'on_new_customer_creation'), 10, 3);
@@ -65,6 +65,11 @@ class ApiManager
         add_action('woocommerce_order_status_changed', array($order_events_manager, 'order_events' ), 10, 3);
         add_action('woocommerce_new_order', array($order_events_manager, 'order_created' ), 10, 1);
         add_action('woocommerce_order_refunded', array($order_events_manager, 'order_created' ), 10, 1);
+        add_action('wp_ajax_nopriv_the_ajax_hook', array($cart_events_manager, 'save_anonymous_user_as_blacklisted' ));
+        add_action('wp_ajax_the_ajax_hook', array($cart_events_manager, 'the_action_function' ));
+        add_filter('woocommerce_update_cart_action_cart_updated', array($cart_events_manager, 'handle_cart_update_event' ), 10, 1);
+        add_filter('woocommerce_add_to_cart', array($cart_events_manager, 'handle_cart_update_event' ), 10, 1);
+        add_action('woocommerce_cart_item_removed', array($cart_events_manager, 'handle_cart_update_event' ), 10, 1 );
     }
 
     public function add_rest_endpoints()
@@ -287,116 +292,173 @@ class ApiManager
 
     private function get_orders_count()
     {
-        $count = 0;
-        $totals = wp_count_posts('shop_order');
-        foreach (wc_get_order_statuses() as $slug => $name ) {
-            if (!isset( $totals->$slug )) {
-                continue;
+        try {
+            $count = 0;
+            $totals = wp_count_posts('shop_order');
+            foreach (wc_get_order_statuses() as $slug => $name ) {
+                if (!isset( $totals->$slug )) {
+                    continue;
+                }
+                $count += (int) $totals->$slug;
             }
-            $count += (int) $totals->$slug;
-        }
 
-        return new WP_REST_Response(
-            array(
-                'count' => $count
-            ), 200);
+            return new WP_REST_Response(
+                array(
+                    'count' => $count
+                ), 200);
+        }
+        catch (\Throwable $t) {
+            return new WP_REST_Response(
+                array(
+                    'message' => $t->getMessage(), " in file: ", $t->getFile(), "at line no:", $t->getLine()
+                ), 500);
+        }
+        
     }
 
     private function get_categories_count()
     {
-        $count = (int) get_terms(
-            CategoryManager::CAT_TAXONOMY_KEY,
-            array('hide_empty' => false, 'fields' => 'count')
-        );
-
-        return new WP_REST_Response(
-            array(
-                'count' => !empty($count) ? $count : 0
-            ), 200);
+        try {
+            $count = (int) get_terms(
+                CategoryManager::CAT_TAXONOMY_KEY,
+                array('hide_empty' => false, 'fields' => 'count')
+            );
+    
+            return new WP_REST_Response(
+                array(
+                    'count' => !empty($count) ? $count : 0
+                ), 200);
+        }
+        catch (\Throwable $t) {
+            return new WP_REST_Response(
+                array(
+                    'message' => $t->getMessage(), " in file: ", $t->getFile(), "at line no:", $t->getLine()
+                ), 500);
+        }
     }
 
     private function get_products_count()
     {
-        $products = new WP_Query(
-            array(
-                'fields'      => 'ids',
-                'post_type'   => 'product',
-                'post_status' => 'publish',
-                'meta_query'  => array(),
-            )
-        );
-
-        return new WP_REST_Response(
-            array(
-                'count' => (int) $products->found_posts
-            ), 200);
+        try {
+            $products = new WP_Query(
+                array(
+                    'fields'      => 'ids',
+                    'post_type'   => 'product',
+                    'post_status' => 'publish',
+                    'meta_query'  => array(),
+                )
+            );
+    
+            return new WP_REST_Response(
+                array(
+                    'count' => (int) $products->found_posts
+                ), 200);
+        }
+        catch (\Throwable $t) {
+            return new WP_REST_Response(
+                array(
+                    'message' => $t->getMessage(), " in file: ", $t->getFile(), "at line no:", $t->getLine()
+                ), 500);
+        }
     }
 
     private function get_product_update($request)
     {
-        $id = $request->get_param('id');
-        $data = (object)[];
+        try {
+            $id = $request->get_param('id');
+            $data = (object)[];
 
-        if (!empty($id)) {
-            $product = wc_get_product($id);
+            if (!empty($id)) {
+                $product = wc_get_product($id);
+            }
+
+            if (is_object($product)) {
+                $products_events_manager = new ProductsManager();
+                $data = $products_events_manager->prepare_payload($product);
+            }
+
+            return new WP_REST_Response($data, 200);
         }
-
-        if (is_object($product)) {
-            $products_events_manager = new ProductsManager();
-            $data = $products_events_manager->prepare_payload($product);
+        catch (\Throwable $t) {
+            return new WP_REST_Response(
+                array(
+                    'message' => $t->getMessage(), " in file: ", $t->getFile(), "at line no:", $t->getLine()
+                ), 500);
         }
-
-        return new WP_REST_Response($data, 200);
     }
 
     private function get_category_update($request)
     {
-        $id = $request->get_param('id');
-        $data = (object)[];
-        $category_events_manager = new CategoryManager();
+        try {
+            $id = $request->get_param('id');
+            $data = (object)[];
+            $category_events_manager = new CategoryManager();
 
-        if (!empty($id)) {
-            $category = $category_events_manager->is_valid_action($id, CategoryManager::CAT_TAXONOMY_KEY);
+            if (!empty($id)) {
+                $category = $category_events_manager->is_valid_action($id, CategoryManager::CAT_TAXONOMY_KEY);
+            }
+
+            if (is_object($category)) {
+                $data = $category_events_manager->prepare_payload($category);
+            }
+
+            return new WP_REST_Response($data, 200);
         }
-
-        if (is_object($category)) {
-            $data = $category_events_manager->prepare_payload($category);
+        catch (\Throwable $t) {
+            return new WP_REST_Response(
+                array(
+                    'message' => $t->getMessage(), " in file: ", $t->getFile(), "at line no:", $t->getLine()
+                ), 500);
         }
-
-        return new WP_REST_Response($data, 200);
     }
 
     private function get_order_update($request)
     {
-        $id = $request->get_param('id');
-        $data = (object)[];
+        try {
+            $id = $request->get_param('id');
+            $data = (object)[];
 
-        if (!empty($id)) {
-            $order = wc_get_order($id);
+            if (!empty($id)) {
+                $order = wc_get_order($id);
+            }
+
+            if (is_object($order)) {
+                $orders_events_manager = new OrdersManager();
+                $data = $orders_events_manager->prepare_payload($order);
+            }
+
+            return new WP_REST_Response($data, 200);
         }
-
-        if (is_object($order)) {
-            $orders_events_manager = new OrdersManager();
-            $data = $orders_events_manager->prepare_payload($order);
+        catch (\Throwable $t) {
+            return new WP_REST_Response(
+                array(
+                    'message' => $t->getMessage(), " in file: ", $t->getFile(), "at line no:", $t->getLine()
+                ), 500);
         }
-
-        return new WP_REST_Response($data, 200);
     }
 
     private function get_categories_url($request)
     {
-        $data = empty($request->get_body()) ? array() : json_decode($request->get_body(), true);
-        $response = array();
+        try {
+            $data = empty($request->get_body()) ? array() : json_decode($request->get_body(), true);
+            $response = array();
 
-        foreach ($data as $key => $value) {
-            $url = get_term_link($value['id'], CategoryManager::CAT_TAXONOMY_KEY);
-            $response[] = (object) [
-                'id' => $value['id'],
-                'url' => is_string($url) ? $url : ""
-            ];
+            foreach ($data as $key => $value) {
+                $url = get_term_link($value['id'], CategoryManager::CAT_TAXONOMY_KEY);
+                $response[] = (object) [
+                    'id' => $value['id'],
+                    'url' => is_string($url) ? $url : ""
+                ];
+            }
+
+            return new WP_REST_Response($response, 201);
         }
-
-        return new WP_REST_Response($response, 201);
+        catch (\Throwable $t) {
+            return new WP_REST_Response(
+                array(
+                    'message' => $t->getMessage(), " in file: ", $t->getFile(), "at line no:", $t->getLine()
+                ), 500);
+        }
     }
 
     private function set_connection($request)
@@ -416,24 +478,37 @@ class ApiManager
     private function get_file_contents()
     {
         $file_name = $_GET['file_name'];
-
-        if (empty($file_name)) {
+        $cleaned_file_name = basename($file_name);
+        $cleaned_file_name = preg_replace('/[^A-Za-z0-9\-\_\.]/', '', $cleaned_file_name);
+        if (empty($cleaned_file_name)) {
             return new WP_REST_Response(array('file_content' => ""), 404);
         }
-        $file_path = wp_upload_dir()['basedir'] .  self::FILE_UPLOADS_PATH . $file_name;
+
+        $file_path = wp_upload_dir()['basedir'] .  self::FILE_UPLOADS_PATH . $cleaned_file_name;
+        if (!file_exists($file_path)) {
+            return new WP_REST_Response(array('file_content' => ""), 404);
+        }
+
         $base64_file_data = base64_encode(file_get_contents($file_path));
+        if (empty($base64_file_data)) {
+            return new WP_REST_Response(array('file_content' => ""), 404);
+        }
+
         return new WP_REST_Response(array('file_content' => $base64_file_data), 200);
     }
 
     private function delete_attachment()
     {
         $file_name = $_GET['file_name'];
-        if ($file_name == "") {
+        $cleaned_file_name = basename($file_name);
+        $cleaned_file_name = preg_replace('/[^A-Za-z0-9\-\_\.]/', '', $cleaned_file_name);
+        $file_path = wp_upload_dir()['basedir'] . self::FILE_UPLOADS_PATH . $cleaned_file_name;
+        if ($cleaned_file_name == "" || !file_exists($file_path)) {
             return new WP_REST_Response([
                 'message' => 'File not found',
             ], 400);
         }
-        $file_path =wp_upload_dir()['basedir'] . self::FILE_UPLOADS_PATH . $file_name;
+
         wp_delete_file($file_path);
         return new WP_REST_Response([
                 'message' => 'File deleted successfully',
@@ -451,6 +526,7 @@ class ApiManager
         $this->flush_option_keys(SENDINBLUE_WC_SETTINGS);
         $this->flush_option_keys(SENDINBLUE_WC_EMAIL_SETTINGS);
         $this->flush_option_keys(SENDINBLUE_WOOCOMMERCE_UPDATE);
+        $this->flush_option_keys(SENDINBLUE_WC_ECOMMERCE_REQ);
         return new WP_REST_Response(array('success' => true), 200);
     }
 
@@ -512,11 +588,10 @@ class ApiManager
             return;
         }
 
-        $opt_in_checked = false;
-        $doi_enabled = !empty($settings[SendinblueClient::IS_SUBSCRIPTION_EMAIL_ENABLED]) && !empty($settings[SendinblueClient::SUBSCRIPTION_EMAIL_TYPE]) && $settings[SendinblueClient::SUBSCRIPTION_EMAIL_TYPE] == 1;
+        $opt_in_checked = "false";
 
-        if (empty($settings[SendinblueClient::IS_DISPLAY_OPT_IN_ENABLED]) || get_post_meta($id, 'ws_opt_in', true) || $doi_enabled) {
-            $opt_in_checked = true;
+        if (empty($settings[SendinblueClient::IS_DISPLAY_OPT_IN_ENABLED]) || get_post_meta($id, 'ws_opt_in', true)) {
+            $opt_in_checked = "true";
         }
 
         if (!empty($settings[SendinblueClient::IS_SUBSCRIBE_EVENT_ENABLED])
@@ -564,14 +639,17 @@ class ApiManager
         $customer_data['last_name'] = $customer_data['billing']['last_name'];
         $customer_data['email'] = $customer_data['billing']['email'];
         $customer_data['subscribed'] = "false";
+        $customer_data['is_customer'] = "false";
         if (!empty($customer_data['customer_id'])) {
             $main_customer = get_userdata($customer_data['customer_id']);
             $customer_data['date_created_gmt'] = $main_customer->user_registered;
             $customer_data['email'] = $main_customer->user_email;
             $customer_data['subscribed'] = "true";
-        } elseif ($opt_in_checked) {
+            $customer_data['is_customer'] = "true";
+        } elseif ($opt_in_checked == "true") {
             $customer_data['subscribed'] = "true";
         }
+        $customer_data['opt_in_checked'] = $opt_in_checked; //true when either no optin box or optin box is checked
         $customer_data['order_id'] = $order->get_order_number();
         $customer_data['order_date'] = gmdate('Y-m-d', strtotime($order->get_date_created()));
         $customer_data['order_price'] = $order->get_total();
@@ -612,6 +690,7 @@ class ApiManager
                 foreach ( $attachments as $key => $attachment ) {
                     $user_connection_id = get_option(SENDINBLUE_WC_USER_CONNECTION_ID, null);
                     $temp_file_name = $user_connection_id . uniqid('_', false) . wp_basename($attachment);
+                    $temp_file_name = preg_replace('/[^A-Za-z0-9\-\_\.]/', '', $temp_file_name);
                     $file_path = $complete_file_path . $temp_file_name;
                     copy($attachment, $file_path);
                     $attachment_path[$i]['temp_file_name'] = $temp_file_name;
@@ -1185,41 +1264,11 @@ class ApiManager
             $order_download_link = ob_get_contents();
             ob_clean();
 
-            // Get order product details.
-            $order_detail = '<table style="padding-left: 0px;width: 100%;text-align: left;"><tr><th>' . __( 'Products', 'wc_sendinblue' ) . '</th><th>' . __( 'Quantity', 'wc_sendinblue' ) . '</th><th>' . __( 'Price', 'wc_sendinblue' ) . '</th></tr>';
-            foreach ( $items as $item ) {
-                if ( isset( $item['variation_id'] ) && ! empty( $item['variation_id'] ) ) {
-                    $product = new \WC_Product_Variation( $item['variation_id'] );
-                } else {
-                    $product = new \WC_Product( $item['product_id'] );
-                }
-                $product_name     = $item['name'];
-                $product_quantity = $item['qty'];
-                $sub_total        = (float) $product->get_price() * (int) $product_quantity;
-                if ( version_compare( get_option( 'woocommerce_db_version' ), '3.0', '>=' ) ) {
-                    $product_price = wc_price( $sub_total, array( 'currency' => $order->get_currency() ) );
-                } else {
-                    $product_price = wc_price( $sub_total, array( 'currency' => $order->order_currency ) );
-                }
-                $order_detail .= '<tr><td>' . $product_name . '</td><td>' . $product_quantity . '</td><td>' . $product_price . '</td></tr>';
-            }
-            $order_detail .= '</table>';
+            $order_detail = $this->getOrderProductDetails($order);
+
+            $fee_table = $this->getOrderFeeTable($order);
+
             if ( version_compare( get_option( 'woocommerce_db_version' ), '3.0', '>=' ) ) {
-                $tracking_content = "Your order has been shipped!<br>You will receive another email with your tracking information soon.";
-
-                try {
-                    if (class_exists('WC_Shipment_Tracking_Actions') && $order->get_status() === 'completed') {
-                        $shipmentTrackingInstance = new \WC_Shipment_Tracking_Actions();
-                        $tracking_items = $shipmentTrackingInstance->get_tracking_items($order->get_order_number(), true);
-    
-                        $latest_tracking_item = array_pop($tracking_items);
-                        $tracking_content = "Your order has been shipped with {$latest_tracking_item['formatted_tracking_provider']} using tracking number <a href='{$latest_tracking_item['formatted_tracking_link']}' target='_blank'>{$latest_tracking_item['tracking_number']}</a>.<br>Please note that it can take up to <strong>24 hours</strong> until the tracking number is active.";
-                    }
-                }
-                catch (\Exception $e) {
-                    error_log($e->getMessage());
-                }
-
                 $orders = array(
                     'ORDER_ID'              => $order->get_order_number(),
                     'BILLING_FIRST_NAME'    => $order->get_billing_first_name(),
@@ -1256,12 +1305,11 @@ class ApiManager
                     'ORDER_SUBTOTAL'        => wc_price( $order->get_subtotal(), array( 'currency' => $order->get_currency() ) ),
                     'ORDER_DOWNLOAD_LINK'   => $order_download_link,
                     'ORDER_PRODUCTS'        => $order_detail,
+                    'ORDER_FEES'            => $fee_table,
                     'PAYMENT_METHOD'        => $order->get_payment_method(),
                     'PAYMENT_METHOD_TITLE'  => $order->get_payment_method_title(),
                     'CUSTOMER_IP_ADDRESS'   => $order->get_customer_ip_address(),
-
-                    // hijack this field to use for the tracking link
-                    'CUSTOMER_USER_AGENT'   => $order->get_status() === 'completed' ? $tracking_content : $order->get_customer_user_agent(),
+                    'CUSTOMER_USER_AGENT'   => $order->get_customer_user_agent(),
                     'REFUNDED_AMOUNT'       => wc_price( $refunded_amount, array( 'currency' => $order->get_currency() ) ),
                 );
             } else {
@@ -1311,5 +1359,45 @@ class ApiManager
         }
 
         return $orders;
+    }
+
+    public function getOrderProductDetails($order)
+    {
+        $order_detail = '<table style="padding-left: 0px;width: 100%;text-align: left;"><tr><th>' . __('Products', 'wc_sendinblue') . '</th><th>' . __('Quantity', 'wc_sendinblue') . '</th><th>' . __('Price', 'wc_sendinblue') . '</th></tr>';
+        foreach ($order->get_items() as $item) {
+            if (isset($item['variation_id']) && !empty($item['variation_id'])) {
+                $product = new \WC_Product_Variation($item['variation_id']);
+            } else {
+                $product = new \WC_Product($item['product_id']);
+            }
+            $product_name = $item['name'];
+            $product_quantity = $item['qty'];
+            $sub_total = (float)$product->get_price() * (int)$product_quantity;
+            if (version_compare(get_option('woocommerce_db_version'), '3.0', '>=')) {
+                $product_price = wc_price($sub_total, array('currency' => $order->get_currency()));
+            } else {
+                $product_price = wc_price($sub_total, array('currency' => $order->order_currency));
+            }
+            $order_detail .= '<tr><td>' . $product_name . '</td><td>' . $product_quantity . '</td><td>' . $product_price . '</td></tr>';
+        }
+        $order_detail .= '</table>';
+        return $order_detail;
+    }
+
+    public function getOrderFeeTable($order)
+    {
+        try {
+            $fee_table = '<table style="padding-left: 0px;width: 100%;text-align: left;"><tr><th>' . __('Fees', 'wc_sendinblue') . '</th><th>' . __('Price', 'wc_sendinblue') . '</th></tr>';
+
+            $fees = $order->get_fees();
+            foreach ($fees as $fee) {
+                $fee_price = wc_price($fee->get_total(), array('currency' => $order->get_currency()));
+                $fee_table .= '<tr><td>' . $fee->get_name() . '</td><td>' . $fee_price . '</td></tr>';
+            }
+            $fee_table .= '</table>';
+            return $fee_table;
+        } catch (\Exception $e) {
+            return "";
+        }
     }
 }

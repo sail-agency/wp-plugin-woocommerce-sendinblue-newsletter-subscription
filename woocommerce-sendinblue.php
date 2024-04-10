@@ -6,10 +6,10 @@
  * Author: Brevo
  * Text Domain: woocommerce-sendinblue-newsletter-subscription
  * Domain Path: /languages
- * Version: 4.0.3
+ * Version: 4.0.19
  * Author URI: https://www.brevo.com/?r=wporg
  * Requires at least: 4.3
- * Tested up to: 6.3
+ * Tested up to: 6.4.3
  * Requires PHP: 5.6
  *
  * WC requires at least: 3.1
@@ -44,11 +44,13 @@ define('SENDINBLUE_WC_API_CONSUMER_KEY', 'sendinblue_woocommerce_consumer_key');
 define('SENDINBLUE_WC_USER_CONNECTION_ID', 'sendinblue_woocommerce_user_connection_id');
 define('SENDINBLUE_WC_SETTINGS', 'sendinblue_woocommerce_user_connection_settings');
 define('SENDINBLUE_WC_EMAIL_SETTINGS', 'sendinblue_woocommerce_email_options_settings');
+define('SENDINBLUE_WC_VERSION_SENT', 'sendinblue_woocommerce_version_sent');
 define('API_KEY_V3_OPTION_NAME', 'sib_wc_api_key_v3');
-define('SENDINBLUE_WC_PLUGIN_VERSION', '4.0.3');
+define('SENDINBLUE_WC_PLUGIN_VERSION', '4.0.19');
 define('SENDINBLUE_WORDPRESS_SHOP_VERSION', $GLOBALS['wp_version']);
 define('SENDINBLUE_WOOCOMMERCE_UPDATE', 'sendinblue_plugin_update_call_apiv3');
 define('SENDINBLUE_REDIRECT', 'sendinblue_woocommerce_redirect');
+define('SENDINBLUE_WC_ECOMMERCE_REQ', 'sendinblue_woocommerce_ecommerce_requires');
 
 require_once SENDINBLUE_WC_ROOT_PATH . '/src/managers/api-manager.php';
 require_once SENDINBLUE_WC_ROOT_PATH . '/src/managers/admin-manager.php';
@@ -212,12 +214,15 @@ function sendinblue_woocommerce_uninstall()
     $api_manager->flush_option_keys(SENDINBLUE_WC_SETTINGS);
     $api_manager->flush_option_keys(SENDINBLUE_WC_EMAIL_SETTINGS);
     $api_manager->flush_option_keys(SENDINBLUE_WOOCOMMERCE_UPDATE);
+    $api_manager->flush_option_keys(SENDINBLUE_WC_ECOMMERCE_REQ);
 }
 
 function sendinblue_woocommerce_update()
 {
     $update_manager = new UpdatePluginManagers();
     $update_manager->send_settings();
+    $update_manager->enable_ecommerce();
+    $update_manager->post_update();
 }
 
 add_action('plugins_loaded', 'sendinblue_woocommerce_load');

@@ -21,6 +21,8 @@ require_once SENDINBLUE_WC_ROOT_PATH . '/src/managers/orders-manager.php';
 require_once SENDINBLUE_WC_ROOT_PATH . '/src/models/api-schema.php';
 require_once SENDINBLUE_WC_ROOT_PATH . '/src/clients/sendinblue-client.php';
 
+require_once SENDINBLUE_WC_ROOT_PATH . '/src/managers/sail-extensions-manager.php';
+
 /**
  * Class ApiManager
  *

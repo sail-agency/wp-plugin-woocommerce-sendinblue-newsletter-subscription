@@ -73,6 +73,7 @@ class ApiManager
         add_filter('woocommerce_update_cart_action_cart_updated', array($cart_events_manager, 'handle_cart_update_event' ), 10, 1);
         add_filter('woocommerce_add_to_cart', array($cart_events_manager, 'handle_cart_update_event' ), 10, 1);
         add_action('woocommerce_cart_item_removed', array($cart_events_manager, 'handle_cart_update_event' ), 10, 1 );
+        add_action( 'woocommerce_before_single_product_summary', array($products_events_manager, 'product_viewed'), 10);
     }
 
     public function add_rest_endpoints()
@@ -153,6 +154,13 @@ class ApiManager
                 self::ROUTE_METHODS    => 'GET',
                 self::ROUTE_CALLBACK   => function () {
                     return $this->modify_response($this->get_products_count());
+                }
+            ),
+            array(
+                self::ROUTE_PATH       => '/customers/count',
+                self::ROUTE_METHODS    => 'GET',
+                self::ROUTE_CALLBACK   => function () {
+                    return $this->modify_response($this->get_customers_count());
                 }
             ),
             array(
@@ -364,7 +372,24 @@ class ApiManager
                 ), 500);
         }
     }
+    private function get_customers_count()
+    {
+        try {
+            $customer_data = count_users();
+            $customer_count = isset($customer_data['avail_roles']['customer'])? $customer_data['avail_roles']['customer'] : 0;
 
+            return new WP_REST_Response(
+                array(
+                    'count' => $customer_count
+                ), 200);
+        }
+        catch (\Throwable $t) {
+            return new WP_REST_Response(
+                array(
+                    'message' => $t->getMessage(), " in file: ", $t->getFile(), "at line no:", $t->getLine()
+                ), 500);
+        }
+    }
     private function get_product_update($request)
     {
         try {
@@ -733,7 +758,7 @@ class ApiManager
 
         $key = $this->get_key();
 
-        if ($key->consumer_secret === $consumer_secret && $key->consumer_key === $consumer_key) {
+        if (isset($key) && $key->consumer_secret === $consumer_secret && $key->consumer_key === $consumer_key) {
             return true;
         }
 
@@ -919,7 +944,7 @@ class ApiManager
         } else {
             $email_html = apply_filters( 'woocommerce_mail_content', $email->style_inline( $email->get_content_html() ) );
         }
-
+        
         return [$email_html, $email_plain];
     }
 
@@ -1368,14 +1393,9 @@ class ApiManager
     {
         $order_detail = '<table style="padding-left: 0px;width: 100%;text-align: left;"><tr><th>' . __('Products', 'wc_sendinblue') . '</th><th>' . __('Quantity', 'wc_sendinblue') . '</th><th>' . __('Price', 'wc_sendinblue') . '</th></tr>';
         foreach ($order->get_items() as $item) {
-            if (isset($item['variation_id']) && !empty($item['variation_id'])) {
-                $product = new \WC_Product_Variation($item['variation_id']);
-            } else {
-                $product = new \WC_Product($item['product_id']);
-            }
             $product_name = $item['name'];
-            $product_quantity = $item['qty'];
-            $sub_total = (float)$product->get_price() * (int)$product_quantity;
+            $product_quantity = $item['quantity'];
+            $sub_total = (float)$item['subtotal'];
             if (version_compare(get_option('woocommerce_db_version'), '3.0', '>=')) {
                 $product_price = wc_price($sub_total, array('currency' => $order->get_currency()));
             } else {

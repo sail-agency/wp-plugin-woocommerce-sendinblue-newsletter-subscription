@@ -23,7 +23,7 @@ class CartEventsManagers
     private $automation_manager;
 
     private $api_manager;
-  
+
     function __construct()
     {
         $this->automation_manager = new AutomationClient();
@@ -42,7 +42,7 @@ class CartEventsManagers
 
         $client = new SendinblueClient();
         $client->eventsSync(SendinblueClient::CONTACT_CREATED, [
-            "subscribed"=>"false", 
+            "subscribed"=>"false",
             "email"=>$email_id,
             "is_anonymous_user"=>true,
         ]);
@@ -50,7 +50,7 @@ class CartEventsManagers
 
     public function the_action_function()
     {
-        
+
         if (!isset($_POST['tracking_email']) || empty($_POST['tracking_email'])) {
             return false;
         }
@@ -77,23 +77,28 @@ class CartEventsManagers
             return false;
         }
 
-        $this->trigger_cart_tracking_anonymous_users($email_id, $ma_key);
+        return $this->trigger_cart_tracking_anonymous_users($email_id, $ma_key);
     }
 
-    public function trigger_cart_tracking_anonymous_users($email_id, $ma_key) 
+    public function trigger_cart_tracking_anonymous_users($email_id, $ma_key)
     {
-        $tracking_event_data = array();
-        $cart_id = $this->get_wc_cart_id();
+        try {
+            $tracking_event_data = array();
+            $cart_id = $this->get_wc_cart_id();
 
-        if (empty(WC()->cart->cart_contents) && !empty(WC()->cart->removed_cart_contents)) {
-            $tracking_event_data = $this->get_tracking_data_cart_deleted($cart_id);
-            $tracking_event_data['event'] = 'cart_deleted';
-        } elseif (!empty(WC()->cart->cart_contents)) {
-            $tracking_event_data = $this->get_tracking_data_cart($cart_id, $email_id);
-            $tracking_event_data['event'] = 'cart_updated';
+            if (empty(WC()->cart->cart_contents) && !empty(WC()->cart->removed_cart_contents)) {
+                $tracking_event_data = $this->get_tracking_data_cart_deleted($cart_id);
+                $tracking_event_data['event'] = 'cart_deleted';
+            } elseif (!empty(WC()->cart->cart_contents)) {
+                $tracking_event_data = $this->get_tracking_data_cart($cart_id, $email_id);
+                $tracking_event_data['event'] = 'cart_updated';
+            }
+
+            $this->automation_manager->send($tracking_event_data, $ma_key);
+        } catch (Exception $e) {
+            return false;
         }
-
-        $this->automation_manager->send($tracking_event_data, $ma_key);
+        return true;
     }
 
     public function get_email_id($tracking_email = "")
@@ -101,7 +106,7 @@ class CartEventsManagers
         $current_user   = wp_get_current_user();
         $found_email_id = '';
         $cookie_email = '';
-        
+
         if (!empty($tracking_email)) {
             $cookie_email = $tracking_email;
         } else if (isset($_COOKIE['email_id'])) {
@@ -207,7 +212,7 @@ class CartEventsManagers
 
         $tracking_event_data = array();
         $cart_id = $this->get_wc_cart_id();
-        
+
         if (!empty(WC()->cart->cart_contents)) {
             $tracking_event_data = $this->get_tracking_data_cart($cart_id);
             $tracking_event_data['event'] = 'cart_updated';
@@ -273,7 +278,7 @@ class CartEventsManagers
         $data = array();
         $cartitems = WC()->cart->get_cart();
         $totals = WC()->cart->get_totals();
-        
+
         if (empty($email)) {
             $email = !empty($this->get_email_id()) ? $this->get_email_id() : '';
         }
@@ -313,8 +318,12 @@ class CartEventsManagers
             $item['price'] = (is_numeric($final_price) && !is_nan($final_price)) ? $final_price : 0;
 
             $product = wc_get_product($cartitem['product_id']);
-            $image_id = $product->get_image_id();
+            $image_id = $variation->get_image_id() ? $variation->get_image_id() : $product->get_image_id();
             $item['image'] = wp_get_attachment_image_url($image_id, 'full');
+            $dyn_img = $this->get_dynamic_img($cartitem['data']->get_image());
+            if (filter_var($dyn_img, FILTER_VALIDATE_URL)) {
+                $item['image'] = $dyn_img;
+            }
 
             $item['url'] = (!empty($cartitem['data']->get_permalink()) && is_string($cartitem['data']->get_permalink())) ? $cartitem['data']->get_permalink() : '';
             array_push($data['items'], $item);
@@ -380,7 +389,7 @@ class CartEventsManagers
             $item['tax'] = (!empty($orderitem->get_total_tax()) && is_numeric($orderitem->get_total_tax()) && ! is_nan($orderitem->get_total_tax())) ? round($orderitem->get_total_tax(), 2) : '';
             $item['quantity'] = (!empty($orderitem->get_quantity()) && is_numeric($orderitem->get_quantity()) && !is_nan($orderitem->get_quantity())) ? (int) $orderitem->get_quantity() : '';
             $product = wc_get_product($orderitem['product_id']);
-            $image_id = $product->get_image_id();
+            $image_id = $variation->get_image_id() ? $variation->get_image_id() : $product->get_image_id();
             $item['image'] = wp_get_attachment_image_url($image_id, 'full');
 
             $item['url'] = (!empty( $product->get_permalink()) && is_string($product->get_permalink())) ? $product->get_permalink() : '';
@@ -493,21 +502,28 @@ class CartEventsManagers
             );
         }
 
-        if (strtoupper($_SERVER['REQUEST_METHOD']) === 'GET') {
-            ?>
-            <input type="hidden" class="ws_opt_in_nonce" name="ws_opt_in_nonce" value="<?php echo wp_create_nonce('order_checkout_nonce'); ?>">
-            <?php
-        }
-
         return $checkout_fields;
     }
 
     public function add_optin_order($order_id)
     {
-        $nonce = isset($_POST['ws_opt_in_nonce']) ? sanitize_text_field($_POST['ws_opt_in_nonce']) : '';
-        if (wp_verify_nonce($nonce, 'order_checkout_nonce')) {
-            $opt_in = isset($_POST['ws_opt_in']) ? true : false;
-            update_post_meta($order_id, 'ws_opt_in', $opt_in);
+        $opt_in = isset($_POST['ws_opt_in']) ? true : false;
+        update_post_meta($order_id, 'ws_opt_in', $opt_in);
+    }
+
+    private function get_dynamic_img($html_tags)
+    {
+        if (!class_exists("DOMDocument") || empty($html_tags)) {
+            return null;
         }
+
+        $doc = new \DOMDocument();
+        $doc->loadHTML($html_tags);
+        $tags = $doc->getElementsByTagName('img');
+        foreach ($tags as $tag) {
+            return $tag->getAttribute('src');
+        }
+
+        return null;
     }
 }

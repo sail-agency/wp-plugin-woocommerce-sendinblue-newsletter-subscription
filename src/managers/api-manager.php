@@ -590,24 +590,26 @@ class ApiManager
             $this->trigger_admin_email_on_new_order($order);
         }
 
-        if ($new_status == "processing") {
-            $this->on_order_status_processing($id);
-        }
+        if (!SailExtensionsManager::doesOrderContainOnlyVirtualProducts($order)) {
+            if ($new_status == "processing") {
+                $this->on_order_status_processing($id);
+            }
 
-        if ($new_status == "on-hold") {
-            $this->on_order_status_on_hold($id);
-        }
+            if ($new_status == "on-hold") {
+                $this->on_order_status_on_hold($id);
+            }
 
-        if ($new_status == "completed") {
-            $this->on_order_status_completed($id);
-        }
+            if ($new_status == "completed") {
+                $this->on_order_status_completed($id);
+            }
 
-        if (in_array($status, ['on-hold', 'processing']) && strpos(SendinblueClient::CANCELLED_ORDER_STATUS, $new_status) !== false) {
-            $this->trigger_admin_email_on_cancelled_order($order);
-        }
+            if (in_array($status, ['on-hold', 'processing']) && strpos(SendinblueClient::CANCELLED_ORDER_STATUS, $new_status) !== false) {
+                $this->trigger_admin_email_on_cancelled_order($order);
+            }
 
-        if (in_array($status, ['on-hold', 'pending']) && strpos(SendinblueClient::FAILED_ORDER_STATUS, $new_status) !== false) {
-            $this->trigger_admin_email_on_failed_order($order);
+            if (in_array($status, ['on-hold', 'pending']) && strpos(SendinblueClient::FAILED_ORDER_STATUS, $new_status) !== false) {
+                $this->trigger_admin_email_on_failed_order($order);
+            }
         }
 
         $settings = $this->get_settings();

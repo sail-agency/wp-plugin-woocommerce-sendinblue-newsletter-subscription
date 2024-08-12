@@ -23,4 +23,16 @@ class SailExtensionsManager
 
         return $tracking_content;
     }
+
+    public static function doesOrderContainOnlyVirtualProducts($order): bool
+    {
+        foreach ($order->get_items() as $item) {
+            $product = $item->get_product();
+            if (!$product->is_virtual()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

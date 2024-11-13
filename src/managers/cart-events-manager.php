@@ -429,6 +429,21 @@ class CartEventsManagers
         foreach ($order->get_shipping_methods() as $item_id => $shipping_item) {
             $data['shipping_method'] = $shipping_item->get_method_title();
         }
+
+        $data['shipping_tax'] = $order->get_shipping_tax() ?? "";
+        $data['discount_tax'] = $order->get_discount_tax() ?? "";
+        $data['discount_code'] = $order->get_coupon_codes() ?? "";
+        $data['fee_lines'] = [];
+        $fees = $order->get_fees() ?? "";
+
+        if (!empty($fees)) {
+            foreach ($fees as $key => $fee) {
+                $data['fee_lines'][$key]['fee_name'] = $fee->get_name() ?? "";
+                $data['fee_lines'][$key]['fee_total'] = $fee->get_total() ?? "";
+                $data['fee_lines'][$key]['fee_tax'] = $fee->get_total_tax() ?? "";
+            }
+        }
+
         $data_track = array(
             'email'     => $email,
             'event'     => 'order_completed',

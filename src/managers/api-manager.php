@@ -304,18 +304,17 @@ class ApiManager
     private function get_orders_count()
     {
         try {
-            $count = 0;
-            $totals = wp_count_posts('shop_order');
-            foreach (wc_get_order_statuses() as $slug => $name ) {
-                if (!isset( $totals->$slug )) {
-                    continue;
-                }
-                $count += (int) $totals->$slug;
-            }
+            $orders = new WP_Query(
+                array(
+                    'post_type' => 'shop_order',
+                    'post_status' => 'any',
+                    'posts_per_page' => -1,
+                )
+            );
 
             return new WP_REST_Response(
                 array(
-                    'count' => $count
+                    'count' => (int) $orders->post_count
                 ), 200);
         }
         catch (\Throwable $t) {
